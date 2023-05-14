@@ -1,0 +1,504 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.body{
+    background: url("bg.jpg");
+    min-height: 100vh;
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.95;
+    padding:1vmin;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+
+
+}
+.uiDiv{
+  width: 90vmin;
+  height: 90vmin;
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border: 4px solid black;
+  opacity: 0.95;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 3vmin;
+
+}
+
+.text{
+    font-size: 6vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding: 5px 10px 5px 10px;
+    margin-bottom: 0.7rem;
+    border-radius: 1.5vmin;
+    height: 7vmin;
+    width: 45vmin;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 15vmin;
+}
+
+.gridButton{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom: 1.7rem;
+    border-radius: 1.5vmin;
+    height: 7vmin;
+    width: 22vmin;
+    justify-content: center;
+    align-items: center;
+    transition-duration: 0.4s;
+}
+.gridButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+.gameOverDiv{
+  width: 50vmin;
+  height: 50vmin;
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border: 4px solid black;
+  opacity: 0.95;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 3vmin;
+}
+
+.gameOverText{
+    font-size: 6vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding: 5px 10px 5px 10px;
+    margin-bottom: 0.7rem;
+    border-radius: 1.5vmin;
+    height: 14vmin;
+    width: 30vmin;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 3vmin;
+}
+
+.startButton{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom: 1.7rem;
+    border-radius: 1.5vmin;
+    height: 7vmin;
+    width: 22vmin;
+    justify-content: center;
+    align-items: center;
+    transition-duration: 0.4s;
+}
+
+.startButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+.quitButton{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom: 1.7rem;
+    border-radius: 1.5vmin;
+    height: 7vmin;
+    width: 22vmin;
+    justify-content: center;
+    align-items: center;
+    transition-duration: 0.4s;
+}
+
+.quitButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+.modal{
+  position: absolute;
+  top:0;
+
+  z-index: 2;
+  width:100vw;
+  height:100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  backdrop-filter: blur(10px);
+
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+#scoreBox{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom: 0.7rem;
+    border-radius: 1.5vmin;
+    height: 5vmin;
+    width: 14vmin;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#hiscoreBox{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    text-align: center;
+    margin-bottom: 0.7rem;
+    border-radius: 1.5vmin;
+    justify-content: center;
+    align-items: center;
+    height: 10vmin;
+    width: 20vmin;
+    
+    
+}
+
+#timerBox{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom: 0.7rem;
+    border-radius: 1.5vmin;
+    justify-content: center;
+    align-items: center;
+    height: 5vmin;
+    width: 19vmin;
+    
+}
+
+#board{
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    width: 75vmin;
+    height: 75vmin;
+    opacity: 0.95;
+    border: 4px solid black;
+    display: grid;
+    /* grid-template-rows: repeat(25,1fr); */
+    /* grid-template-columns: repeat(25,1fr); */
+    margin-top: 3vmin;
+    position:relative;
+    top:-1.5rem;
+    
+}
+
+#arrowButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem; /* Add margin at the top of the arrow buttons */
+}
+
+
+#word{
+    font-size: 4.4vmin;
+    font-family: 'Creepster', cursive;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 4px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:10px;
+    padding-right:10px;
+    text-align: center;
+    margin-bottom: 0.7rem;
+    border-radius: 1.5vmin;
+    height: 10vmin;
+    width:18vmin;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.head{
+    background-color: rgb(112, 55, 226);
+}
+
+.snake{
+    background-color: rgb(112, 55, 226);
+    opacity: 0.5;
+}
+
+.buff {
+  background-color: black;
+  border-radius: 1vmin;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  
+}
+
+.buff-container{
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+}
+
+.food {
+    position: relative;
+    color: black; /* Set the text color */
+    font-size: 1.4rem; /* Set the font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Creepster', cursive;
+    text-align: center;
+}
+
+
+
+.letter-container {
+    width: 100%;
+    height: 100%;
+}
+
+.bomb{
+    position: relative;
+    font-size: 2vmin; /* Set the font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.bomb-container{
+    width: 100%;
+    height: 100%;
+}
+
+.portal{
+    position: relative;
+    font-size: 2vmin; /* Set the font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* background: linear-gradient(rgb(72, 72, 222),rgb(58, 55, 55)); */
+}
+
+
+  
+#arrowButtons button {
+    font-size: 3vmin;
+    padding: 0.5rem 1rem;
+    margin: 0 0.3rem;
+    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+    border: 2px solid black;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1vmin;
+  }
+
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+#pauseButton{
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border-radius: 1.5vmin;
+  border: 3px solid black;
+  font-family: 'Creepster', cursive;
+  height:6vmin;
+  width: 6vmin;
+  font-size: 2vmin;
+
+}
+
+#resumeButton{
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border-radius: 1.5vmin;
+  border: 3px solid black;
+  font-family: 'Creepster', cursive;
+  height:6vmin;
+  width: 6vmin;
+  margin-left: 1.5vmin;
+  font-size: 2vmin;
+}
+
+#resumeButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+#pauseButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+#resumeButton:disabled:hover {
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  cursor: not-allowed;
+}
+
+#pauseButton:disabled:hover {
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  cursor: not-allowed;
+}
+
+#saveGameButton{
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border-radius: 1.5vmin;
+  border: 3px solid black;
+  font-family: 'Creepster', cursive;
+  height:6vmin;
+  width: 12vmin;
+  margin-left: 1.5vmin;
+  font-size: 2vmin;
+  margin-top: 2vmin;
+  font-size: 2.5vmin;
+  position:relative;
+  left: -0.5vmin;
+}
+
+#saveGameButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+#saveGameButton:disabled:hover {
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  cursor: not-allowed;
+}
+
+
+
+#life{
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border-radius: 1vmin;
+  border: 3px solid black;
+  height: 30px;
+  width: 100px;
+  font-family: 'Creepster', cursive;
+  font-size: 2.2vmin;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 3vmin;
+  width: 12vmin;
+
+}
+
+.centerBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.leftContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  margin-right: 1rem;
+  position: relative;
+  right: 15vmax;
+  bottom: 17vmax;
+}
+
+.rightContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  margin-left: 1rem;
+  position: relative;
+  left: 15vmax;
+  bottom: 14vmax;
+}
+
+.buttonBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
