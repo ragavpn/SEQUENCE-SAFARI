@@ -245,7 +245,7 @@ function bombMover(){
     }
   }
   else if (Dir.y===-1){
-    if (bomb.y>1){
+    if (bomb.y>2){
       bomb.y-=1;
     }
     else{

@@ -11,8 +11,10 @@ let timer = NaN;     // Initial timer value
 let speed=8;           // Speed of the snake
 let lastPaintTime=0;   // Last time the screen was painted
 let score=0            // Score of the game
-let snakeArr=[         // The Snake
-    {x:13,y:15}
+let snakeArr=[
+    {x:13,y:15},
+    {X:13,y:16},
+    {x:13,y:17}
 ]
 let food={x:6,y:7};    // The food
 
@@ -45,12 +47,6 @@ function main(millisecondspassed) {
 
 // Checks wether the game collides with the wall or eats itself
 function isCollide(snake) {
-    // If you bump into yourself
-    for (let i = 1; i < snake.length; i++) {
-      if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
-        return true;
-      }
-    }
     // If the snake bumps into the wall
     if (snake[0].x >= 25 || snake[0].x <= 0 || snake[0].y >= 25 || snake[0].y <= 0) {
       return true;
@@ -92,7 +88,11 @@ function gameOver(){
     musicSound.pause();
     inputDir = { x: 0, y: 0 };
     alert("Game Over. Press any key to play again!");
-    snakeArr = [{ x: 13, y: 15 }];
+    snakeArr=[
+      {x:13,y:15},
+      {X:13,y:16},
+      {x:13,y:17}
+  ]
     musicSound.play();
     score = 0;
     count=0;
@@ -240,25 +240,31 @@ gameLoop();
 
 // Response to keypress
 window.addEventListener('keydown',e =>{
-    gameLoop();
-    moveSound.play();
     switch (e.key) {
-        case "ArrowUp":  
+        case "ArrowUp":
+            gameLoop();
+            moveSound.play();  
             inputDir.x=0;
             inputDir.y=-1;
             break;
 
-        case "ArrowDown":  
+        case "ArrowDown":
+            gameLoop();
+            moveSound.play();   
             inputDir.x=0;
             inputDir.y=1;
             break;
 
         case "ArrowLeft":
+            gameLoop();
+            moveSound.play(); 
             inputDir.x=-1;
             inputDir.y=0;
             break;
 
         case "ArrowRight":
+            gameLoop();
+            moveSound.play();
             inputDir.x=1;
             inputDir.y=0;
             break;
@@ -282,23 +288,26 @@ downButton.addEventListener('click', () => moveSnake('down'));
 
 // Function to handle snake movement
 function moveSnake(direction) {
-  gameLoop();
   inputDir = { x: 0, y: 0 };
   moveSound.play();
   switch (direction) {
     case 'up':
+      gameLoop();
       inputDir.x = 0;
       inputDir.y = -1;
       break;
     case 'down':
+      gameLoop();
       inputDir.x = 0;
       inputDir.y = 1;
       break;
     case 'left':
+      gameLoop();
       inputDir.x = -1;
       inputDir.y = 0;
       break;
     case 'right':
+      gameLoop();
       inputDir.x = 1;
       inputDir.y = 0;
       break;

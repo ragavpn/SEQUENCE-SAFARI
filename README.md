@@ -1,4 +1,5 @@
 # DELTA-SEQUENCE-SAFARI
+
 The first task of DELTA
 
 This game consits of 2 modes:
