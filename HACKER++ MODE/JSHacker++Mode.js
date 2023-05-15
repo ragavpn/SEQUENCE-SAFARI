@@ -225,7 +225,9 @@ function wordSpreader() {
         y: Math.floor(Math.random() * (gridSizeChoice-2)) + 2,
       };
     } while (snakeArr.some((part) => part.x === letterPosition.x && part.y === letterPosition.y) ||
-      letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y));
+      letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y) || 
+      (letterPosition.x === portalOpen.x && letterPosition.y === portalOpen.y) || 
+      (letterPosition.x === portalClose.x && letterPosition.y === portalClose.y));
 
     letterPositions.push({ letter, ...letterPosition });
   });
