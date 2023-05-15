@@ -186,24 +186,25 @@ function gameEngine(){
 
     // Update the food element to display the letters
     letterPositions.forEach((letterPos) => {
-        const foodElement = document.createElement('div');
-        foodElement.style.gridRowStart = letterPos.y;
-        foodElement.style.gridColumnStart = letterPos.x;
-        foodElement.classList.add('food');
-      
-        // Create a container element to center the letter
-        const letterContainer = document.createElement('div');
-        letterContainer.classList.add('letter-container');
-      
-        // Set the text content of the letter container to the letter
-        letterContainer.textContent = letterPos.letter;
-      
-        // Append the letter container to the food element
-        foodElement.appendChild(letterContainer);
-      
-        // Append the food element to the board
-        board.appendChild(foodElement);
-      });
+    const foodElement = document.createElement('div');
+    foodElement.style.gridRowStart = letterPos.y;
+    foodElement.style.gridColumnStart = letterPos.x;
+    foodElement.style.fontSize = `${Math.floor(60/25)}vmin`;
+    foodElement.classList.add('food');
+
+    // Create a container element to center the letter
+    const letterContainer = document.createElement('div');
+    letterContainer.classList.add('letter-container');
+
+    // Set the text content of the letter container to the letter
+    letterContainer.textContent = letterPos.letter;
+
+    // Append the letter container to the food element
+    foodElement.appendChild(letterContainer);
+
+    // Append the food element to the board
+    board.appendChild(foodElement);
+  });
 }
 
 // Main Logic starts here
@@ -293,21 +294,25 @@ function moveSnake(direction) {
   switch (direction) {
     case 'up':
       gameLoop();
+      moveSound.play(); 
       inputDir.x = 0;
       inputDir.y = -1;
       break;
     case 'down':
       gameLoop();
+      moveSound.play(); 
       inputDir.x = 0;
       inputDir.y = 1;
       break;
     case 'left':
       gameLoop();
+      moveSound.play(); 
       inputDir.x = -1;
       inputDir.y = 0;
       break;
     case 'right':
       gameLoop();
+      moveSound.play(); 
       inputDir.x = 1;
       inputDir.y = 0;
       break;

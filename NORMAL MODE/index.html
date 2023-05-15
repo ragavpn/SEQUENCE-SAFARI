@@ -10,20 +10,28 @@
 
 <body>
   <div class="body">
-    <div id="board"></div>
-    <div id="scoreBox">Score: 0</div>
-    <div id="hiscoreBox">High Score: 0</div>
-    <div id="word"></div>
-    <div id="timerBox" class="info-box">Timer: 60</div>
-    <div id="arrowButtons">
-      <button id="upButton"><i class="arrow up"></i></button>
+    <div class="leftContainer">
+      <div id="timerBox" class="info-box">Timer: 120</div>
+      <div id="hiscoreBox">High Score: 0</div>
     </div>
-    <div id="arrowButtons">
-      <button id="leftButton"><i class="arrow left"></i></button>
-      <button id="downButton"><i class="arrow down"></i></button>
-      <button id="rightButton"><i class="arrow right"></i></button>
-
+    
+    <div class="centerBox">
+      <div id="board"></div>
+      <div id="arrowButtons">
+        <button id="upButton"><i class="arrow up"></i></button>
+      </div>
+      <div id="arrowButtons">
+        <button id="leftButton"><i class="arrow left"></i></button>
+        <button id="downButton"><i class="arrow down"></i></button>
+        <button id="rightButton"><i class="arrow right"></i></button>
+      </div>
     </div>
+    
+    <div class="rightContainer">
+      <div id="scoreBox">Score: 0</div>
+      <div id="word"></div>
+    </div>
+    
   </div>
   <script src="JSNormalMode.js"></script>
 </body>
