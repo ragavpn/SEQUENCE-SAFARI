@@ -4,14 +4,18 @@ const foodSound = new Audio('food.mp3');
 const gameOverSound = new Audio('death.mp3');
 const moveSound = new Audio('move.wav');
 const musicSound = new Audio('music.mp3');
+const loselifesound = new Audio('loselife.mp3');
 
 let timer = NaN;       // Initial timer value
 let speed = 8;           // Speed of the snake
 let lastPaintTime = 0;   // Last time the screen was painted
 let score = 0            // Score of the game
-let snakeArr = [         // The Snake
-  { x: 13, y: 15 }
+let snakeArr=[
+  {x:13,y:15},
+  {x:13,y:16},
+  {x:13,y:17}
 ]
+let countStart = 0;           
 let food = { x: 6, y: 7 };             // The food
 let gainBuff = { x: 0, y: 0 };  // The gainBuff
 let gainBuffTimer = 0;          // The gainBuff timer
@@ -21,12 +25,13 @@ let paused = 0;
 let fixedTime = NaN;
 let count = 0;
 let isPaused = false;
-let countbuff = 0;
 let myInterval;
 let modalVanish = 0;
 let hiscoreval;
 let gridSizeChoice = 25;
 let countRestart=0;
+let countBodyPause = 0;
+let countBuff=0;
 
 // Create an array to store the positions of the letters in the word
 const letterPositions = [];
@@ -210,20 +215,25 @@ function wordSpreader() {
 
 // Game Over logic
 function gameOver() {
-  gameOverSound.play();
   musicSound.pause();
+  gameOverSound.play();
   inputDir = { x: 0, y: 0 };
   alert("Game Over. Press any key to play again!");
   modalVanish = 0;
   countRestart= 1;
+  countBodyPause = 0;
   Pause();
   gridSize();
-  snakeArr = [{ x: 13, y: 15 }];
+  snakeArr=[
+    {x:13,y:15},
+    {x:13,y:16},
+    {x:13,y:17}
+  ]
   musicSound.play();
   score = 0;
   count = 0;
   speed = 8;
-  countbuff = 0;
+  countBuff=0;
   lives = 3;
   life.innerHTML = "Lives Left: " + lives;
   scoreBox.innerHTML = "Score: " + score;
@@ -233,7 +243,10 @@ function gameOver() {
 
 // Game resume logic for when the snakes eats the wrong letter
 function gameResume() {
+  console.log("Game Resumed");  
   wordSpreader();
+  loselifesound.play();
+  countBodyPause = 0;
   alert("Lost 1 life. Be Careful");
   lives--;
   life.innerHTML = "Lives Left: " + lives;
@@ -265,6 +278,7 @@ function gameResumeCollideWall() {
   snakeArr[0].y += inputDir.y;
 
   wordSpreader();
+  loselifesound.play();
   alert("Lost 1 life. Be Careful");
   lives--;
   life.innerHTML = "Lives Left: " + lives;
@@ -272,38 +286,18 @@ function gameResumeCollideWall() {
 
 // Game resume logic for when the snake collides with itself
 function gameResumeCollideSelf() {
-  const newSnakeArr = [snakeArr[0]]; // New snake array with only the head position
-
-  // Generate new positions for each word
-  letterPositions.forEach((letterPos) => {
-    let newX, newY;
-    let isCollideWithSnake = true;
-    let isCollideWithWall = true;
-
-    // Keep generating new positions until a valid position is found
-    while (isCollideWithSnake || isCollideWithWall) {
-      newX = Math.floor(Math.random() * (23 - 2 + 1)) + 2; // Generate random X position between 2 and 23
-      newY = Math.floor(Math.random() * (23 - 2 + 1)) + 2; // Generate random Y position between 2 and 23
-
-      // Check collision with snake body
-      isCollideWithSnake = snakeArr.some(
-        (snakePart) => snakePart.x === newX && snakePart.y === newY
-      );
-
-      // Check collision with wall
-      isCollideWithWall =
-        newX === 1 || newX === 24 || newY === 1 || newY === 24;
+  let length=snakeArr.length;
+  snakeArr=[];
+  countBodyPause=0;
+  for (let j=0; j<length; j++) {
+    if (15+j<gridSizeChoice){
+      snakeArr.push({x:13,y:15+j});
+      console.log({x:13,y:15+j});
     }
-
-    // Add the new position to the new snake array
-    newSnakeArr.push({ x: newX, y: newY, letter: letterPos.letter });
-  });
-
-  // Update the snake array with the new positions
-  snakeArr = newSnakeArr;
-
-  // Call wordsSpreader() to update the letter positions on the grid
-  wordSpreader();
+    else{
+      snakeArr.push({x:13-j,y:gridSizeChoice});
+    }
+  }
 }
 
 //Game running logic
@@ -313,10 +307,10 @@ function gameEngine() {
     gameOver();
   }
   else if (isCollide(snakeArr) && lives != 0) {
-    if (isCollideWall) {
+    if (isCollideWall(snakeArr)) {
       gameResumeCollideWall();
     }
-    else if (isCollideSelf) {
+    else if (isCollideSelf(snakeArr)) {
       gameResumeCollideSelf()
     }
   }
@@ -390,7 +384,7 @@ function gameEngine() {
   ) gameResume();
 
   // Moving the snake
-  if (!paused){
+  if (!paused && countBodyPause===1){
     for (let i = snakeArr.length - 2; i >= 0; i--) {
       snakeArr[i + 1] = { ...snakeArr[i] };
     }
@@ -415,7 +409,7 @@ function gameEngine() {
     if (index === 0) {
       snakeElement.classList.add('head');
     }
-    else {
+    else{
       snakeElement.classList.add('snake');
     }
     board.appendChild(snakeElement);
@@ -444,19 +438,30 @@ function gameEngine() {
     // Append the food element to the board
     board.appendChild(foodElement);
   });
-  if (snakeArr.length === 2 && countbuff === 0) {
+  if (snakeArr.length === 3 && countBuff === 0) {
     generateGainBuffPosition();
-    countbuff++;
+    countBuff++;
   }
 
 
-  if (snakeArr.length > 1 && gainBuff.x != 0 && gainBuff.y != 0 && gainBuffTimer < 30 && !paused) {
+  if ( gainBuff.x != 0 && gainBuff.y != 0 && gainBuffTimer < 30 && !paused) {
     // Update the board to display the buff
     const buffElement = document.createElement('div');
     buffElement.style.gridRowStart = gainBuff.y;
     buffElement.style.gridColumnStart = gainBuff.x;
-    buffElement.textContent = randomBuff;
+    buffElement.style.fontSize = `${50/gridSizeChoice}vmin`;
     buffElement.classList.add('buff');
+
+    // Create a container element to center the letter
+    const buffContainer = document.createElement('div');
+    buffContainer.classList.add('buff-container');
+
+    // Set the text content of the letter container to the letter
+    buffContainer.textContent = randomBuff;
+
+    // Append the letter container to the food element
+    buffElement.appendChild(buffContainer);
+    
     board.appendChild(buffElement);
     gainBuffTimer++;
   }
@@ -506,29 +511,35 @@ function senseKeyPress() {
   // Response to keypress
   window.addEventListener('keydown', e => {
     if (!paused && modalVanish===1) { // Check if the game is not paused
-
-      moveSound.play();
       switch (e.key) {
         case "ArrowUp":
           gameLoop();
+          moveSound.play();
+          countBodyPause=1;
           inputDir.x = 0;
           inputDir.y = -1;
           break;
 
         case "ArrowDown":
           gameLoop();
+          moveSound.play();
+          countBodyPause=1;
           inputDir.x = 0;
           inputDir.y = 1;
           break;
 
         case "ArrowLeft":
           gameLoop();
+          moveSound.play();
+          countBodyPause=1;
           inputDir.x = -1;
           inputDir.y = 0;
           break;
 
         case "ArrowRight":
           gameLoop();
+          moveSound.play();
+          countBodyPause=1;
           inputDir.x = 1;
           inputDir.y = 0;
           break;
@@ -558,28 +569,37 @@ function onScreenButtons(){
 // Function to handle snake movement
 function moveSnake(direction) {
   if (!paused) {
-    gameLoop();
     inputDir = { x: 0, y: 0 };
-    moveSound.play();
     switch (direction) {
       case 'up':
+        gameLoop();
+        moveSound.play();
+        countBodyPause=1;
         inputDir.x = 0;
         inputDir.y = -1;
         break;
       case 'down':
+        gameLoop();
+        moveSound.play();
+        countBodyPause=1;
         inputDir.x = 0;
         inputDir.y = 1;
         break;
       case 'left':
+        gameLoop();
+        moveSound.play();
+        countBodyPause=1;
         inputDir.x = -1;
         inputDir.y = 0;
         break;
       case 'right':
+        gameLoop();
+        moveSound.play();
+        countBodyPause=1;
         inputDir.x = 1;
         inputDir.y = 0;
         break;
       default:
-
         break;
     }
   }

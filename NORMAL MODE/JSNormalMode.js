@@ -84,8 +84,8 @@ wordSpreader();
 
 // Game Over logic
 function gameOver(){
-    gameOverSound.play();
     musicSound.pause();
+    gameOverSound.play();
     inputDir = { x: 0, y: 0 };
     alert("Game Over. Press any key to play again!");
     snakeArr=[
@@ -224,6 +224,7 @@ else{
 // Game Loop
 function gameLoop(){
   if (count===0){
+    musicSound.play();
     timer=NaN;
     clearInterval(myInterval);
     myInterval = setInterval(main,Math.ceil(1000/speed),Math.ceil(1000/speed));

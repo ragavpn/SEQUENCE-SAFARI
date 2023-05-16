@@ -11,31 +11,62 @@
 <body>
   <div class="body">
     <div class="leftContainer">
-      <div id="timerBox" class="info-box">Timer: 120</div>
-      <div id="hiscoreBox">High Score: 0</div>
-      <div id="life">Lives Left: 3</div>
+      <div id="Player2">Player 2</div>
+      <div class="Content">
+        <div id="scoreBox1">Score : 0</div>
+        <div id="hiscoreBox1">High Score : 0</div>
+        <div id="word1"></div>
+        <div id="life1">Lives Left : 3</div>
+      </div>
     </div>
     
     <div class="centerBox">
-      <div id="board"></div>
-      <div id="arrowButtons">
-        <button id="upButton"><i class="arrow up"></i></button>
+      <div class="topContainer">
+        <button id="pauseButton">Pause</button>
+        <div id="timerBox" class="info-box">Timer: 120</div>
+        <button id="resumeButton">Play</button>
       </div>
-      <div id="arrowButtons">
-        <button id="leftButton"><i class="arrow left"></i></button>
-        <button id="downButton"><i class="arrow down"></i></button>
-        <button id="rightButton"><i class="arrow right"></i></button>
+      
+      <div id="board"></div>
+
+      <div class="buttonContainer">
+        <div class="wasdButtonContainer">
+          <div id="arrowButtons">
+            <button id="button-w"></button>
+          </div>
+          <div id="arrowButtons">
+            <button id="button-a"></button>
+            <button id="button-s"></button>
+            <button id="button-d"></button>
+          </div>
+        </div>
+
+        <button id="saveGameButton">Save Game</button>
+
+        <div class="arrowButtonContainer">
+          <div id="arrowButtons">
+            <button id="upButton"><i class="arrow up"></i></button>
+          </div>
+          <div id="arrowButtons">
+            <button id="leftButton"><i class="arrow left"></i></button>
+            <button id="downButton"><i class="arrow down"></i></button>
+            <button id="rightButton"><i class="arrow right"></i></button>
+          </div>
+
+        </div>
+        
+
       </div>
     </div>
     
     <div class="rightContainer">
-      <div id="scoreBox">Score: 0</div>
-      <div id="word"></div>
-      <div id="buttonBox">
-        <button id="pauseButton">Pause</button>
-        <button id="resumeButton">Play</button>
+      <div id="Player1">Player 1</div>
+      <div class="Content">
+        <div id="scoreBox">Score : 0</div>
+        <div id="hiscoreBox">High Score : 0</div>
+        <div id="word"></div>
+        <div id="life">Lives Left : 3</div>
       </div>
-      <button id="saveGameButton">Save Game</button>
     </div>
     
   </div>

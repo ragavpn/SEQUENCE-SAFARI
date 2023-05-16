@@ -4,43 +4,59 @@ const foodSound = new Audio('food.mp3');
 const gameOverSound = new Audio('death.mp3');
 const moveSound = new Audio('move.wav');
 const musicSound = new Audio('music.mp3');
+const loselifesound = new Audio('loselife.mp3');
+const gainBuffSound = new Audio('buff.mp3');
+const portalSound = new Audio('portal.mp3');
 
 let timer = NaN;       // Initial timer value
 let speed = 8;           // Speed of the snake
 let lastPaintTime = 0;   // Last time the screen was painted
 let score = 0            // Score of the game
-let snakeArr = [         // The Snake
-  { x: 13, y: 15 }
+let snakeArr=[
+  {x:13,y:15},
+  {x:13,y:16},
+  {x:13,y:17}
 ]
 let snakeArr1 =[
-  {x : 5 ,y : 9}
+  {x : 5 ,y : 9},
+  {x : 5, y : 8},
+  {x : 5, y : 7}
 ]
 let speed1=8;
-
+let inputDir1={x:0,y:0};
+let lives1=3;
+let score1=0;
 
 let food = { x: 6, y: 7 };             // The food
 let gainBuff = { x: 0, y: 0 };  // The gainBuff
 let gainBuffTimer = 0;          // The gainBuff timer
 let lives = 3;                    // Lives of the player
 let lastInputDir = { x: 0, y: 0 };
+let lastInputDir1 = { x: 0, y: 0 };
 let paused = 0;
 let fixedTime = NaN;
 let count = 0;
 let isPaused = false;
 let countbuff = 0;
+let countbuff1 = 0;
 let myInterval;
 let modalVanish = 0;
 let hiscoreval;
+let hiscoreval1;
 let gridSizeChoice = 25;
 let countRestart=0;
 let Dir={x:0,y:1};
 let bomb={x:1,y:1};
 let portalOpen={x:3,y:3};
 let portalClose={x:gridSizeChoice-3,y:gridSizeChoice-3};
-let countResume=0;
+let countBodyPause = 0;
+let countBodyPause1 = 0;
+let bombPause = 0;
+
 
 // Create an array to store the positions of the letters in the word
 const letterPositions = [];
+const letterPositions1 = [];
 
 // The Words that will be displayed on grid for the snake to eat
 let words = ["AHOY", "ADIOS", "CIAO", "HOLA", "SALUT", "SHALOM", "NIT", "TRICHY", "BREAK", "CROWN", "DANCE", "EXTRA", "FLAME", "GRAPE", "HOUSE", "IVORY",
@@ -127,6 +143,33 @@ function isCollideWall(snake) {
   return false;
 }
 
+function isCollideSelf(snake) {
+  for (let i = 1; i < snake.length; i++) {
+    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function isCollide12(){
+  for (let i = 0; i < snakeArr1.length; i++) {
+    if (snakeArr1[i].x === snakeArr[0].x && snakeArr1[i].y === snakeArr[0].y) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function isCollide21(){
+  for (let i = 0; i < snakeArr.length; i++) {
+    if (snakeArr[i].x === snakeArr1[0].x && snakeArr[i].y === snakeArr1[0].y) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function gridChoice(choice) {
   gridSizeChoice = choice;
   portalClose={x:gridSizeChoice-3,y:gridSizeChoice-3};
@@ -136,8 +179,10 @@ function gridChoice(choice) {
     Resume();
   }
   senseKeyPress();
+  senseKeyPress1();
   gameLoop();
   wordSpreader();
+  wordSpreader1();
   generateBomb();
 
 }
@@ -185,14 +230,7 @@ function gridSize() {
 
 
 // Checks whether the snake has collided with itself
-function isCollideSelf(snake) {
-  for (let i = 1; i < snake.length; i++) {
-    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
-      return true;
-    }
-  }
-  return false;
-}
+
 
 // generates a random position for the gain buff
 function generateGainBuffPosition() {
@@ -203,7 +241,8 @@ function generateGainBuffPosition() {
       y: Math.floor(Math.random() * (gridSizeChoice-2)) + 2
     };
   } while (snakeArr.some(part => part.x === gainBuff.x && part.y === gainBuff.y) ||
-    letterPositions.some(letter => letter.x === gainBuff.x && letter.y === gainBuff.y));
+    letterPositions.some(letter => letter.x === gainBuff.x && letter.y === gainBuff.y) || 
+    snakeArr1.some(part => part.x === gainBuff.x && part.y === gainBuff.y));
 
 }
 
@@ -211,7 +250,7 @@ function generateGainBuffPosition() {
 function wordSpreader() {
   // Generate a random word from the 'words' array
   const randomWord = words[Math.floor(Math.random() * words.length)];
-  word.innerHTML = "The Word:<br>" + randomWord;
+  word.innerHTML = "The Word :<br>" + randomWord;
 
   // Clear the array which has the letter positions
   letterPositions.length = 0;
@@ -225,11 +264,41 @@ function wordSpreader() {
         y: Math.floor(Math.random() * (gridSizeChoice-2)) + 2,
       };
     } while (snakeArr.some((part) => part.x === letterPosition.x && part.y === letterPosition.y) ||
-      letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y) || 
+      letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y) ||
+      snakeArr1.some(part => part.x === gainBuff.x && part.y === gainBuff.y) || 
       (letterPosition.x === portalOpen.x && letterPosition.y === portalOpen.y) || 
-      (letterPosition.x === portalClose.x && letterPosition.y === portalClose.y));
+      (letterPosition.x === portalClose.x && letterPosition.y === portalClose.y) ||
+      letterPositions1.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y));
 
     letterPositions.push({ letter, ...letterPosition });
+  });
+}
+
+function wordSpreader1(){
+  // Generate a random word from the 'words' array
+  const randomWord1 = words[Math.floor(Math.random() * words.length)];
+  word1.innerHTML = "The Word :<br>" + randomWord1;
+
+  // Clear the array which has the letter positions
+  letterPositions1.length = 0;
+
+  // Generate random positions for each letter in the word
+  randomWord1.split('').forEach((letter) => {
+    console.log("letter")
+    let letterPosition1 = { x: 0, y: 0 };
+    do {
+      letterPosition1 = {
+        x: Math.floor(Math.random() * (gridSizeChoice-2)) + 2,
+        y: Math.floor(Math.random() * (gridSizeChoice-2)) + 2,
+      };
+    } while (snakeArr1.some((part) => part.x === letterPosition1.x && part.y === letterPosition1.y) ||
+      letterPositions1.some((letter) => letter.x === letterPosition1 && letter.y === letterPosition1.y) ||
+      snakeArr.some(part => part.x === gainBuff.x && part.y === gainBuff.y) || 
+      (letterPosition1.x === portalOpen.x && letterPosition1.y === portalOpen.y) || 
+      (letterPosition1.x === portalClose.x && letterPosition1.y === portalClose.y) ||
+      letterPositions.some((letter) => letter.x === letterPosition1.x && letter.y === letterPosition1.y));
+
+    letterPositions1.push({ letter, ...letterPosition1 });
   });
 }
 
@@ -254,29 +323,47 @@ function bombMover(){
       Dir.y=1;
     }
   }
+  bombPause=1;
 
 }
 
 // Game Over logic
 function gameOver() {
-  gameOverSound.play();
   musicSound.pause();
+  gameOverSound.play();
   inputDir = { x: 0, y: 0 };
+  inputDir1 = { x: 0, y: 0 };
   alert("Game Over. Press any key to play again!");
   modalVanish = 0;
   countRestart= 1;
+  countBodyPause = 0;
+  countBodyPause1 = 0;
   Pause();
   gridSize();
   generateBomb();
-  snakeArr = [{ x: 13, y: 15 }];
+  snakeArr=[
+    {x:13,y:15},
+    {x:13,y:16},
+    {x:13,y:17}
+  ]
+  snakeArr1=[
+    {x : 5 ,y : 9},
+    {x : 5, y : 8},
+    {x : 5, y : 7}
+  ]
   musicSound.play();
   score = 0;
+  score1 = 0;
   count = 0;
   speed = 8;
+  speed1 = 8;
   countbuff = 0;
   lives = 3;
-  life.innerHTML = "Lives Left: " + lives;
-  scoreBox.innerHTML = "Score: " + score;
+  lives1 = 3;
+  life.innerHTML = "Lives Left : " + lives;
+  life1.innerHTML = "Lives Left : " + lives1;
+  scoreBox.innerHTML = "Score : " + score;
+  scoreBox1.innerHTML = "Score : " + score1;
 
   return; // Exit the game engine function to stop the game loop
 }
@@ -285,129 +372,222 @@ function gameOver() {
 function gameResume() {
   wordSpreader();
   generateBomb();
-  countResume=1;
-  alert("Lost 1 life. Be Careful");
+  countBodyPause = 0;
+  loselifesound.play();
   lives--;
-  life.innerHTML = "Lives Left: " + lives;
+  life.innerHTML = "Lives Left : " + lives;
   inputDir = { x: 0, y: 0 };
+}
 
-
+function gameResume1(){
+  wordSpreader1();
+  generateBomb();
+  countBodyPause1 = 0;
+  loselifesound.play();
+  lives1--;
+  life1.innerHTML = "Lives Left : " + lives;
+  inputDir1 = { x: 0, y: 0 };
 }
 
 // Game resume logic for when the snake collides with the wall
-function gameResumeCollideWall(snake) {
-  if (snake[0].y <=0) {
+function gameResumeCollideWall() {
+  if (snakeArr[0].y <=0) {
     inputDir = { x: 0, y: 1 };
   }
-  else if (snake[0].y >= gridSizeChoice) {
+  else if (snakeArr[0].y >= gridSizeChoice) {
     inputDir = { x: 0, y: -1 };
   }
-  else if (snake[0].x <=0) {
+  else if (snakeArr[0].x <=0) {
     inputDir = { x: 1, y: 0 };
   }
-  else if (snake[0].x >= gridSizeChoice) {
+  else if (snakeArr[0].x >= gridSizeChoice) {
     inputDir = { x: -1, y: 0 };
   }
 
-  snake.reverse();
-  for (let i = snake.length - 2; i >= 0; i--) {
-    snake[i + 1] = { ...snake[i] };
+  snakeArr.reverse();
+  for (let i = snakeArr.length - 2; i >= 0; i--) {
+    snakeArr[i + 1] = { ...snakeArr[i] };
   }
 
-  snake[0].x += inputDir.x;
-  snake[0].y += inputDir.y;
+  snakeArr[0].x += inputDir.x;
+  snakeArr[0].y += inputDir.y;
 
   wordSpreader();
-  generateBomb();
-  alert("Lost 1 life. Be Careful");
+  loselifesound.play();
   lives--;
-  life.innerHTML = "Lives Left: " + lives;
+  life.innerHTML = "Lives Left : " + lives;
 }
+
+function gameResumeCollideWall1() {
+  if (snakeArr1[0].y <=0) {
+    inputDir1 = { x: 0, y: 1 };
+  }
+  else if (snakeArr1[0].y >= gridSizeChoice) {
+    inputDir1 = { x: 0, y: -1 };
+  }
+  else if (snakeArr1[0].x <=0) {
+    inputDir1 = { x: 1, y: 0 };
+  }
+  else if (snakeArr1[0].x >= gridSizeChoice) {
+    inputDir1 = { x: -1, y: 0 };
+  }
+
+  snakeArr1.reverse();
+  for (let i = snakeArr1.length - 2; i >= 0; i--) {
+    snakeArr1[i + 1] = { ...snakeArr1[i] };
+  }
+
+  snakeArr1[0].x += inputDir1.x;
+  snakeArr1[0].y += inputDir1.y;
+
+  wordSpreader1();
+  loselifesound.play();
+  lives1--;
+  life1.innerHTML = "Lives Left : " + lives1;
+}
+
+
+
 
 // Game resume logic for when the snake collides with itself
-function gameResumeCollideSelf(snake) {
-  const newSnakeArr = [snake[0]]; // New snake array with only the head position
-
-  // Generate new positions for each word
-  letterPositions.forEach((letterPos) => {
-    let newX, newY;
-    let isCollideWithSnake = true;
-    let isCollideWithWall = true;
-
-    // Keep generating new positions until a valid position is found
-    while (isCollideWithSnake || isCollideWithWall) {
-      newX = Math.floor(Math.random() * (23 - 2 + 1)) + 2; // Generate random X position between 2 and 23
-      newY = Math.floor(Math.random() * (23 - 2 + 1)) + 2; // Generate random Y position between 2 and 23
-
-      // Check collision with snake body
-      isCollideWithSnake = snake.some(
-        (snakePart) => snakePart.x === newX && snakePart.y === newY
-      );
-
-      // Check collision with wall
-      isCollideWithWall =
-        newX === 1 || newX === 24 || newY === 1 || newY === 24;
+function gameResumeCollideSelf() {
+  let length=snakeArr.length;
+  snakeArr=[];
+  countBodyPause=0;
+  for (let j=0; j<length; j++) {
+    if (15+j<gridSizeChoice){
+      snakeArr.push({x:13,y:15+j});
+      console.log({x:13,y:15+j});
     }
+    else{
+      snakeArr.push({x:13-j,y:gridSizeChoice});
+    }
+  }
 
-    // Add the new position to the new snake array
-    newSnakeArr.push({ x: newX, y: newY, letter: letterPos.letter });
-  });
-
-  // Update the snake array with the new positions
-  snake = newSnakeArr;
-
-  // Call wordsSpreader() to update the letter positions on the grid
   wordSpreader();
+  loselifesound.play();
+  lives--;
+  life.innerHTML = "Lives Left : " + lives;
 }
+
+function gameResumeCollideSelf1() {
+  let length=snakeArr1.length;
+  snakeArr1=[];
+  countBodyPause1=0;
+  for (let j=0; j<length; j++) {
+    if (9-j>1){
+      snakeArr1.push({x : 5 ,y : 9-j});
+    }
+    else{
+      snakeArr1.push({x:5+j,y:1});
+    }
+  }
+
+  wordSpreader1();
+  loselifesound.play();
+  lives1--;
+  life1.innerHTML = "Lives Left : " + lives1;
+}
+
+
 
 //Game running logic
 function gameEngine() {
+  bombPause=0;
+
   // Part 1: updating the snake array and food
-  if (isCollide(snakeArr) && lives === 0) {
+  if ((isCollide(snakeArr) && lives === 0)) {
     gameOver();
   }
-  else if (isCollide(snakeArr) && lives != 0) {
-    if (isCollideWall) {
-      gameResumeCollideWall(snakeArr);
+  else if ((isCollide(snakeArr) && lives != 0)) {
+    if (isCollideWall(snakeArr)) {
+      gameResumeCollideWall();
     }
-    else if (isCollideSelf) {
-      gameResumeCollideSelf(snakeArr)
+    else if (isCollideSelf(snakeArr)) {
+      gameResumeCollideSelf();
     }
+  }
+
+  if ((isCollide(snakeArr1) && lives1 === 0)) {
+    gameOver();
+  }
+  else if ((isCollide(snakeArr1) && lives1 != 0)) {
+    if (isCollideWall(snakeArr1)) {
+      gameResumeCollideWall1();
+    }
+    else if (isCollideSelf(snakeArr1)) {
+      gameResumeCollideSelf1();
+    }
+  }
+
+  if (isCollide12()){
+    gameResumeCollideSelf();
+  }
+
+  if (isCollide21()){
+    gameResumeCollideSelf1();
   }
 
   // Check if the snake head collides with the buff
   if (snakeArr[0].x === gainBuff.x && snakeArr[0].y === gainBuff.y) {
     // Remove the last segment of the snake
+    gainBuffSound.play();
     snakeArr.pop()
     speed -= 0.5;
     gainBuff = { x: 0, y: 0 };
 
   }
+
+  // Check if the snake1 head collides with the buff
   if (snakeArr1[0].x === gainBuff.x && snakeArr1[0].y === gainBuff.y) {
     // Remove the last segment of the snake
+    gainBuffSound.play();
     snakeArr1.pop()
-    speed1 -= 0.5;
+    speed -= 0.5;
     gainBuff = { x: 0, y: 0 };
 
   }
 
+  // Snake travels through the portal
   snakeArr.forEach((e) => {
     if (e.y === 3 && e.x === 3) {
+      portalSound.play();
       e.y = gridSizeChoice-3;
       e.x = gridSizeChoice-3;
     }
     else if (e.y === (gridSizeChoice-3) && e.x === (gridSizeChoice-3)) {
+      portalSound.play();
       e.y = 3;
       e.x = 3;
     }
     
   })
 
+  // Snake1 travels through the portal
+  snakeArr1.forEach((e) => {
+    if (e.y === 3 && e.x === 3) {
+      portalSound.play();
+      e.y = gridSizeChoice-3;
+      e.x = gridSizeChoice-3;
+    }
+    else if (e.y === (gridSizeChoice-3) && e.x === (gridSizeChoice-3)) {
+      portalSound.play();
+      e.y = 3;
+      e.x = 3;
+    }
 
+  })
+
+  // Snake eats the bomb
   if (snakeArr[0].x === bomb.x && snakeArr[0].y === bomb.y) {
     gameOver();
-
   }
+
+  // Snake1 eats the bomb
+  if (snakeArr1[0].x === bomb.x && snakeArr1[0].y === bomb.y) {
+    gameOver();
+  }
+
   // Check if the snake head position matches the next letter position in the word
   if (
     letterPositions.length > 0 &&
@@ -434,12 +614,12 @@ function gameEngine() {
       if (score > hiscoreval) {
         hiscoreval = score;
         localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
-        hiscoreBox.innerHTML = "High Score:<br>" + hiscoreval;
+        hiscoreBox.innerHTML = "High Score : " + hiscoreval;
       }
 
       // Displaying the Timer and Score
-      scoreBox.innerHTML = "Score: " + score;
-      timerBox.innerHTML = "Timer: " + Math.ceil(timer / 1000);
+      scoreBox.innerHTML = "Score : " + score;
+      timerBox.innerHTML = "Timer : " + Math.ceil(timer / 1000);
 
       // Changing the direction of the snake
       snakeArr.unshift({
@@ -471,8 +651,74 @@ function gameEngine() {
     gameResume();
   }
 
+
+  // Check if the snake head position matches the next letter position in the word
+  if (
+    letterPositions1.length > 0 &&
+    snakeArr1[0].y === letterPositions1[0].y &&
+    snakeArr1[0].x === letterPositions1[0].x
+  ) {
+
+    // Remove the matched letter from the array
+    foodSound.play();
+    letterPositions1.shift();
+
+    // Check if the snake has eaten the entire word
+    if (letterPositions1.length === 0) {
+      score1 += 1;   // Updating the score
+      timer += 5000;   // Updating the timer
+      speed1 += 1;       // Increasing the speed of the snake
+      gainBuffTimer = 0;  // Resetting the gainBuff timer
+
+
+      clearInterval(myInterval);
+      myInterval = setInterval(main, Math.ceil(1000 / speed1), Math.ceil(1000 / speed1))
+
+      // Updating the high score
+      if (score1 > hiscoreval1) {
+        hiscoreval1 = score1;
+        localStorage.setItem("hiscore1", JSON.stringify(hiscoreval1));
+        hiScoreBox1.innerHTML = "High Score of Player 2 : " + hiscoreval1;
+      }
+
+      // Displaying the Timer and Score
+      scoreBox1.innerHTML = "Score : " + score1;
+      timerBox.innerHTML = "Timer : " + Math.ceil(timer / 1000);
+
+      // Changing the direction of the snake
+      snakeArr1.unshift({
+        x: snakeArr1[0].x + inputDir1.x,
+        y: snakeArr1[0].y + inputDir1.y,
+      });
+
+      wordSpreader1();
+      generateGainBuffPosition();
+      generateBomb();
+      randomBuff = gainBuffArray[Math.floor(Math.random() * gainBuffArray.length)];
+    }
+  }
+  // Checking if the snake ate any other letter in the word not following the order
+  else if (
+    (letterPositions1.length > 0 &&
+      letterPositions1.slice(1).some((letter) => {
+        return letter.x === snakeArr1[0].x && letter.y === snakeArr1[0].y;
+      })) && lives1 === 0
+  ) gameOver();
+
+  // Checking if snake at any other letter and any lives are left
+  else if (
+    (letterPositions1.length > 0 &&
+      letterPositions1.slice(1).some((letter) => {
+        return letter.x === snakeArr1[0].x && letter.y === snakeArr1[0].y;
+      })) && lives1 != 0
+  ) {
+    gameResume1();
+  }
+
+      
+
   // Moving the snake and Bomb
-  if (!paused && !countResume){
+  if (!paused && countBodyPause==1){
     for (let i = snakeArr.length - 2; i >= 0; i--) {
       snakeArr[i + 1] = { ...snakeArr[i] };
     }
@@ -480,8 +726,27 @@ function gameEngine() {
     snakeArr[0].x += inputDir.x;
     snakeArr[0].y += inputDir.y;
 
-    console.log(snakeArr[0].x)
-    bombMover()
+    bombMover();
+  }
+  
+  if (!paused && (countBodyPause===1 || countBodyPause1===1))
+  {
+    bombMover
+  }
+
+  // Moving the snake and Bomb
+  if (!paused && countBodyPause1==1){
+    for (let i = snakeArr1.length - 2; i >= 0; i--) {
+      snakeArr1[i + 1] = { ...snakeArr1[i] };
+    }
+
+    snakeArr1[0].x += inputDir1.x;
+    snakeArr1[0].y += inputDir1.y;
+
+    if (!bombPause){
+      bombMover();
+    }
+
   }
   
 
@@ -507,6 +772,22 @@ function gameEngine() {
   })
 
 
+  snakeArr1.forEach((e, index) => {
+    snakeElement1 = document.createElement('div');
+    snakeElement1.style.gridRowStart = e.y;
+    snakeElement1.style.gridColumnStart = e.x;
+
+    if (index === 0) {
+      snakeElement1.classList.add('head1');
+    }
+    else {
+      snakeElement1.classList.add('snake1');
+    }
+    board.appendChild(snakeElement1);
+
+  })
+
+
 
   // Update the food element to display the letters
   letterPositions.forEach((letterPos) => {
@@ -529,17 +810,44 @@ function gameEngine() {
     // Append the food element to the board
     board.appendChild(foodElement);
   });
-  if (snakeArr.length === 2 && countbuff === 0) {
+  if (snakeArr.length === 3 && countbuff === 0) {
     generateGainBuffPosition();
     countbuff++;
   }
 
+  //Update the food element to display the letters for snake 2
+  letterPositions1.forEach((letterPos1) => {
+    const foodElement1 = document.createElement('div');
+    foodElement1.style.gridRowStart = letterPos1.y;
+    foodElement1.style.gridColumnStart = letterPos1.x;
+    foodElement1.style.fontSize = `${Math.floor(60/gridSizeChoice)}vmin`;
+    foodElement1.classList.add('food1');
 
-  if (snakeArr.length > 1 && gainBuff.x != 0 && gainBuff.y != 0 && gainBuffTimer < 30 && !paused) {
+    // Create a container element to center the letter
+    const letterContainer1 = document.createElement('div');
+    letterContainer1.classList.add('letter-container');
+
+    // Set the text content of the letter container to the letter
+    letterContainer1.textContent = letterPos1.letter;
+
+    // Append the letter container to the food element
+    foodElement1.appendChild(letterContainer1);
+
+    // Append the food element to the board
+    board.appendChild(foodElement1);
+  });
+  // if (snakeArr1.length === 3 && countbuff1 === 0) {
+  //   generateGainBuffPosition();
+  //   countbuff1++;
+  // }
+
+
+  if ( gainBuff.x != 0 && gainBuff.y != 0 && gainBuffTimer < 30 && !paused) {
     // Update the board to display the buff
     const buffElement = document.createElement('div');
     buffElement.style.gridRowStart = gainBuff.y;
     buffElement.style.gridColumnStart = gainBuff.x;
+    buffElement.style.fontSize = `${50/gridSizeChoice}vmin`;
     buffElement.classList.add('buff');
 
     // Create a container element to center the letter
@@ -555,7 +863,7 @@ function gameEngine() {
     board.appendChild(buffElement);
     gainBuffTimer++;
   }
-  if (gainBuffTimer >= 30 && !paused) {
+  if (gainBuffTimer >= 30 && !paused ) {
     generateGainBuffPosition();
     randomBuff = gainBuffArray[Math.floor(Math.random() * gainBuffArray.length)];
     gainBuffTimer = 0;
@@ -566,6 +874,7 @@ function gameEngine() {
     const bombElement = document.createElement('div');
     bombElement.style.gridRowStart = bomb.y;
     bombElement.style.gridColumnStart = bomb.x;
+    bombElement.style.fontSize = `${50/gridSizeChoice}vmin`;
 
     const bombContainer = document.createElement('div');
     bombContainer.classList.add('bomb-container')
@@ -579,12 +888,16 @@ function gameEngine() {
   portalElementOpen = document.createElement('div');
   portalElementOpen.style.gridRowStart = portalOpen.y;
   portalElementOpen.style.gridColumnStart = portalOpen.x;
+  portalElementOpen.style.fontSize = `${50/gridSizeChoice}vmin`;
+  portalElementOpen.style.borderRadius = `${20/gridSizeChoice}vmin`;
   portalElementOpen.textContent = "🌀";
   portalElementOpen.classList.add('portal');
 
   portalElementClose = document.createElement('div');
   portalElementClose.style.gridRow = portalClose.y;
   portalElementClose.style.gridColumn = portalClose.x;
+  portalElementClose.style.fontSize = `${50/gridSizeChoice}vmin`;
+  portalElementClose.style.borderRadius = `${20/gridSizeChoice}vmin`;
   portalElementClose.textContent = "🌀";
   portalElementClose.classList.add('portal');
 
@@ -595,17 +908,29 @@ function gameEngine() {
 }
 
 function addHiScore(){
-// Adding highscore to local storage
-let hiscore = localStorage.getItem("hiscore");
-if (hiscore === null) {
-  hiscoreval = 0;
-  localStorage.setItem("hiscore", JSON.stringify(hiscoreval))
-}
-else {
-  hiscoreval = JSON.parse(hiscore);
-  hiscoreBox.innerHTML = "High Score:<br>" + hiscore;
+  // Adding highscore to local storage
+  let hiscore = localStorage.getItem("hiscore");
+  if (hiscore === null) {
+    hiscoreval = 0;
+    localStorage.setItem("hiscore", JSON.stringify(hiscoreval))
+  }
+  else {
+    hiscoreval = JSON.parse(hiscore);
+    hiscoreBox.innerHTML = "High Score : " + hiscore;
+  }
 }
 
+function addHiScore1(){
+  // Adding highscore to local storage
+  let hiscore1 = localStorage.getItem("hiscore1");
+  if (hiscore1 === null) {
+    hiscoreval1 = 0;
+    localStorage.setItem("hiscore1", JSON.stringify(hiscoreval1))
+  }
+  else {
+    hiscoreval1 = JSON.parse(hiscore1);
+    hiscoreBox1.innerHTML = "High Score : " + hiscore1;
+  }
 }
 
 
@@ -630,36 +955,87 @@ function gameLoop() {
 function senseKeyPress() {
   // Response to keypress
   window.addEventListener('keydown', e => {
-    countResume=0;
     if (!paused && modalVanish===1) { // Check if the game is not paused
-      moveSound.play();
       switch (e.key) {
         case "ArrowUp":
           gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
           inputDir.x = 0;
           inputDir.y = -1;
           break;
 
         case "ArrowDown":
           gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
           inputDir.x = 0;
           inputDir.y = 1;
           break;
 
         case "ArrowLeft":
           gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
           inputDir.x = -1;
           inputDir.y = 0;
           break;
 
         case "ArrowRight":
           gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
           inputDir.x = 1;
           inputDir.y = 0;
           break;
 
         default:
           break;
+      }
+    }
+  });
+}
+
+function senseKeyPress1(){
+  // Response to keypress
+  window.addEventListener('keydown', e => {
+    if (!paused && modalVanish===1) { // Check if the game is not paused
+      switch (e.key) {
+        case "w":
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = 0;
+          inputDir1.y = -1;
+          break;
+
+        case "s":
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = 0;
+          inputDir1.y = 1;
+          break;
+
+        case "a":
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = -1;
+          inputDir1.y = 0;
+          break;
+
+        case "d":
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = 1;
+          inputDir1.y = 0;
+          break;
+          
+        default:
+          break;
+        
       }
     }
   });
@@ -680,31 +1056,94 @@ function onScreenButtons(){
 
 }
 
+function onScreenButtons1(){
+
+  const upButton1 = document.getElementById('button-w');
+  const leftButton1 = document.getElementById('button-a');
+  const rightButton1 = document.getElementById('button-d');
+  const downButton1 = document.getElementById('button-s');
+
+  // Add event listeners to the buttons
+  upButton1.addEventListener('click', () => moveSnake1('up'));
+  leftButton1.addEventListener('click', () => moveSnake1('left'));
+  rightButton1.addEventListener('click', () => moveSnake1('right'));
+  downButton1.addEventListener('click', () => moveSnake1('down'));
+
+}
+
 // Function to handle snake movement
 function moveSnake(direction) {
   if (!paused) {
-    gameLoop();
     inputDir = { x: 0, y: 0 };
-    moveSound.play();
     switch (direction) {
       case 'up':
+        gameLoop();
+        moveSound.play();
+        countBodyPause = 1;
         inputDir.x = 0;
         inputDir.y = -1;
         break;
       case 'down':
+        gameLoop();
+        moveSound.play();
+        countBodyPause = 1;
         inputDir.x = 0;
         inputDir.y = 1;
         break;
       case 'left':
+        gameLoop();
+        moveSound.play();
+        countBodyPause = 1;
         inputDir.x = -1;
         inputDir.y = 0;
         break;
       case 'right':
+        gameLoop();
+        moveSound.play();
+        countBodyPause = 1;
         inputDir.x = 1;
         inputDir.y = 0;
         break;
       default:
 
+        break;
+    }
+  }
+}
+
+function moveSnake1(direction){
+  if (!paused) {
+    inputDir1 = { x: 0, y: 0 };
+    switch (direction) {
+      case 'up':
+        gameLoop();
+        moveSound.play();
+        countBodyPause1 = 1;
+        inputDir1.x = 0;
+        inputDir1.y = -1;
+        break;
+      case 'down':
+        gameLoop();
+        moveSound.play();
+        countBodyPause1 = 1;
+        inputDir1.x = 0;
+        inputDir1.y = 1;
+        break;
+      case 'left':
+        gameLoop();
+        moveSound.play();
+        countBodyPause1 = 1;
+        inputDir1.x = -1;
+        inputDir1.y = 0;
+        break;
+      case 'right':
+        gameLoop();
+        moveSound.play();
+        countBodyPause1 = 1;
+        inputDir1.x = 1;
+        inputDir1.y = 0;
+        break;
+      default:
         break;
     }
   }
@@ -725,9 +1164,12 @@ function pauseResumeButtons(){
 function Pause() {
   lastInputDir = { ...inputDir };
   inputDir = { x: 0, y: 0 };
+  lastInputDir1 = { ...inputDir1 };
+  inputDir1 = { x: 0, y: 0 };
   paused = 1;
   pauseLoop();
   senseKeyPress();
+  senseKeyPress1();
 
 }
 
@@ -736,9 +1178,13 @@ function Resume() {
   if (lastInputDir.x !== 0 || lastInputDir.y !== 0) {
     inputDir = { ...lastInputDir };
   }
+  if (lastInputDir1.x !== 0 || lastInputDir1.y !== 0) {
+    inputDir1 = { ...lastInputDir1 };
+  }
   paused = 0;
   pauseLoop();
   senseKeyPress();
+  senseKeyPress1();
 
 }
 
@@ -769,5 +1215,7 @@ musicSound.play();
 
 gridSize();
 addHiScore();
+addHiScore1();
 onScreenButtons();
+onScreenButtons1();
 pauseResumeButtons()
