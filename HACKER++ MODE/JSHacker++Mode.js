@@ -52,6 +52,9 @@ let portalClose={x:gridSizeChoice-3,y:gridSizeChoice-3};
 let countBodyPause = 0;
 let countBodyPause1 = 0;
 let bombPause = 0;
+let gameOverTextVanish = 1;
+let bombAte =0;
+let bombAte1 =0;
 
 
 // Create an array to store the positions of the letters in the word
@@ -201,22 +204,30 @@ function gridSize() {
   let button1 = document.createElement('button');
   let button2 = document.createElement('button');
   let button3 = document.createElement('button');
+  let button4 = document.createElement('button');
+  let button5 = document.createElement('button');
 
   button1.textContent = "EASY";
-  button2.textContent = "MEDIUM";
+  button2.textContent = "NORMAL";
   button3.textContent = "HARD";
+  button4.textContent = "INSANE";
+  button5.textContent = "IMPOSSIBLE";
   
 
   textBegin.classList.add("text");
   button1.classList.add("gridButton");
   button2.classList.add("gridButton");
   button3.classList.add("gridButton");
+  button4.classList.add("gridButton");
+  button5.classList.add("gridButton");
   
 
   uiDiv.appendChild(textBegin);
   uiDiv.appendChild(button1);
   uiDiv.appendChild(button2);
   uiDiv.appendChild(button3);
+  uiDiv.appendChild(button4);
+  uiDiv.appendChild(button5);
 
   parentDiv.appendChild(uiDiv);
   document.body.appendChild(parentDiv);
@@ -224,10 +235,66 @@ function gridSize() {
   button1.addEventListener('click', () => gridChoice(20));
   button2.addEventListener('click', () => gridChoice(25));
   button3.addEventListener('click', () => gridChoice(30));
+  button4.addEventListener('click', () => gridChoice(35));
+  button5.addEventListener('click', () => gridChoice(40));
   textBegin.textContent = "Choose Difficulty";
-
 }
 
+function gameOverDiv(player){
+  gameOverTextVanish = 0;
+  let parentDiv = document.createElement("div");
+  parentDiv.classList.add("modal"); 
+  parentDiv.id = "modal"
+
+  let gameOverDiv = document.createElement("div");
+  gameOverDiv.classList.add("gameOverDiv");
+
+  let gameOverText = document.createElement("div");
+  let scoreText = document.createElement("div");
+  let scoreText1 = document.createElement("div");
+  let lostPlayer = document.createElement("div");
+  let restartButton = document.createElement("button");
+  let quitButton = document.createElement("button");
+
+  let buttonContainer=document.createElement("div");
+  buttonContainer.classList.add("gameOverButtons");
+
+  gameOverText.textContent = "GAME OVER";
+  scoreText.textContent = "Score : " + score;
+  scoreText1.textContent = "Score : " + score1;
+  if (player == 1){
+    lostPlayer.textContent = "Player 1 Lost";
+  }
+  else if (player == 2){
+    lostPlayer.textContent = "Player 2 Lost";
+  }
+  restartButton.textContent = "Restart";
+  quitButton.textContent = "Quit";
+
+  gameOverText.classList.add("gameOverText");
+  scoreText.classList.add("scoreText");
+  scoreText1.classList.add("scoreText1");
+  lostPlayer.classList.add("lostPlayer");
+  restartButton.classList.add("restartButton");
+  quitButton.classList.add("quitButton");
+
+  gameOverDiv.appendChild(gameOverText);
+  gameOverDiv.appendChild(lostPlayer);
+  gameOverDiv.appendChild(scoreText);
+  gameOverDiv.appendChild(scoreText1);
+  
+  buttonContainer.appendChild(restartButton);
+  buttonContainer.appendChild(quitButton);
+
+  gameOverDiv.appendChild(buttonContainer);
+
+  parentDiv.appendChild(gameOverDiv);
+  document.body.appendChild(parentDiv);
+
+  restartButton.addEventListener('click', () => restart());
+  quitButton.addEventListener('click', () => quit());
+
+}
 
 // Checks whether the snake has collided with itself
 
@@ -333,13 +400,27 @@ function gameOver() {
   gameOverSound.play();
   inputDir = { x: 0, y: 0 };
   inputDir1 = { x: 0, y: 0 };
-  alert("Game Over. Press any key to play again!");
+  Pause();
+  if (lives === 0){
+    gameOverDiv(1);
+  }
+  else if (lives1 === 0){
+    gameOverDiv(2);
+  }
+
+  if (bombAte === 1){
+    bombAte = 0;
+    gameOverDiv(1);
+  }
+  else if (bombAte1 === 1){
+    bombAte1 = 0;
+    gameOverDiv(2);
+  }
   modalVanish = 0;
   countRestart= 1;
   countBodyPause = 0;
   countBodyPause1 = 0;
-  Pause();
-  gridSize();
+  
   generateBomb();
   snakeArr=[
     {x:13,y:15},
@@ -447,8 +528,6 @@ function gameResumeCollideWall1() {
 }
 
 
-
-
 // Game resume logic for when the snake collides with itself
 function gameResumeCollideSelf() {
   let length=snakeArr.length;
@@ -488,8 +567,6 @@ function gameResumeCollideSelf1() {
   lives1--;
   life1.innerHTML = "Lives Left : " + lives1;
 }
-
-
 
 //Game running logic
 function gameEngine() {
@@ -580,11 +657,13 @@ function gameEngine() {
 
   // Snake eats the bomb
   if (snakeArr[0].x === bomb.x && snakeArr[0].y === bomb.y) {
+    bombAte = 1;
     gameOver();
   }
 
   // Snake1 eats the bomb
   if (snakeArr1[0].x === bomb.x && snakeArr1[0].y === bomb.y) {
+    bombAte1 = 1;
     gameOver();
   }
 
@@ -665,6 +744,7 @@ function gameEngine() {
 
     // Check if the snake has eaten the entire word
     if (letterPositions1.length === 0) {
+      console.log("Fuck yes")
       score1 += 1;   // Updating the score
       timer += 5000;   // Updating the timer
       speed1 += 1;       // Increasing the speed of the snake
@@ -997,6 +1077,7 @@ function senseKeyPress() {
 }
 
 function senseKeyPress1(){
+  console.log(paused,modalVanish)
   // Response to keypress
   window.addEventListener('keydown', e => {
     if (!paused && modalVanish===1) { // Check if the game is not paused
@@ -1005,6 +1086,7 @@ function senseKeyPress1(){
           gameLoop();
           moveSound.play();
           countBodyPause1 = 1;
+          console.log("w")
           inputDir1.x = 0;
           inputDir1.y = -1;
           break;
@@ -1158,6 +1240,7 @@ function pauseResumeButtons(){
 
   pauseButton.disabled = true;
   resumeButton.disabled = true;
+  saveGameButton.disabled = true;
 }
 
 // Function to handle pause
@@ -1193,6 +1276,7 @@ function pauseLoop() {
   if (paused === 1) {
     resumeButton.disabled = false;
     pauseButton.disabled = true;
+    saveGameButton.disabled = false;
     fixedTime = timer;
     timer = NaN;
     clearInterval(myInterval);
@@ -1202,12 +1286,23 @@ function pauseLoop() {
   } else if (paused === 0) {
     resumeButton.disabled = true;
     pauseButton.disabled = false;
+    saveGameButton.disabled = true;
     timer = fixedTime;
     clearInterval(myInterval);
     myInterval = setInterval(main, Math.ceil(1000 / speed), Math.ceil(1000 / speed));
 
 
   }
+}
+
+function restart(){
+  gameOverTextVanish = 1;
+  document.getElementById("modal").remove();
+  gridSize();
+}
+
+function quit(){
+  window.close();
 }
 
 // Main logic starts here
