@@ -1,5 +1,4 @@
 // Game Vairables and constants
-let inputDir = { x: 0, y: 0 };
 const foodSound = new Audio('food.mp3');
 const gameOverSound = new Audio('death.mp3');
 const moveSound = new Audio('move.wav');
@@ -8,58 +7,106 @@ const loselifesound = new Audio('loselife.mp3');
 const gainBuffSound = new Audio('buff.mp3');
 const portalSound = new Audio('portal.mp3');
 
-let timer = NaN;       // Initial timer value
-let speed = 8;           // Speed of the snake
-let lastPaintTime = 0;   // Last time the screen was painted
-let score = 0            // Score of the game
-let snakeArr=[
-  {x:13,y:15},
-  {x:13,y:16},
-  {x:13,y:17}
-]
-let snakeArr1 =[
-  {x : 5 ,y : 9},
-  {x : 5, y : 8},
-  {x : 5, y : 7}
-]
-let speed1=8;
-let inputDir1={x:0,y:0};
-let lives1=3;
-let score1=0;
+let timer;
+let speed;
+let lastPaintTime;
+let score;
+let snakeArr;
+let snakeArr1;
+let speed1;
+let inputDir;
+let inputDir1;
+let lives1;
+let score1;
 
-let food = { x: 6, y: 7 };             // The food
-let gainBuff = { x: 0, y: 0 };  // The gainBuff
-let gainBuffTimer = 0;          // The gainBuff timer
-let lives = 3;                    // Lives of the player
-let lastInputDir = { x: 0, y: 0 };
-let lastInputDir1 = { x: 0, y: 0 };
-let paused = 0;
-let fixedTime = NaN;
-let count = 0;
-let isPaused = false;
-let countbuff = 0;
-let countbuff1 = 0;
+let food;             // The food
+let gainBuff;  // The gainBuff
+let gainBuffTimer;          // The gainBuff timer
+let lives;                    // Lives of the player
+let lastInputDir;
+let lastInputDir1;
+let paused;
+let fixedTime;
+let count;
+let isPaused;
+let countbuff;
+let countbuff1;
 let myInterval;
-let modalVanish = 0;
+let modalVanish;
 let hiscoreval;
 let hiscoreval1;
-let gridSizeChoice = 25;
-let countRestart=0;
-let Dir={x:0,y:1};
-let bomb={x:1,y:1};
-let portalOpen={x:3,y:3};
-let portalClose={x:gridSizeChoice-3,y:gridSizeChoice-3};
-let countBodyPause = 0;
-let countBodyPause1 = 0;
-let bombPause = 0;
-let gameOverTextVanish = 1;
-let bombAte =0;
-let bombAte1 =0;
-
+let gridSizeChoice;
+let countRestart;
+let Dir;
+let bomb;
+let portalOpen;
+let portalClose;
+let countBodyPause;
+let countBodyPause1;
+let bombPause;
+let gameOverTextVanish;
+let bombAte;
+let bombAte1;
+let randomBuff;
+let saveGameCount;
+let randomWord;
+let randomWord1;
 
 // Create an array to store the positions of the letters in the word
-const letterPositions = [];
-const letterPositions1 = [];
+let letterPositions;
+let letterPositions1;
+
+function initalValVariables(){
+    timer = NaN;       // Initial timer value
+    speed = 8;           // Speed of the snake
+    lastPaintTime = 0;   // Last time the screen was painted
+    score = 0            // Score of the game
+    snakeArr=[
+      {x:13,y:15},
+      {x:13,y:16},
+      {x:13,y:17}
+    ]
+    snakeArr1 =[
+      {x : 5 ,y : 9},
+      {x : 5, y : 8},
+      {x : 5, y : 7}
+    ]
+    speed1=8;
+    inputDir = { x: 0, y: 0 };
+    inputDir1={x:0,y:0};
+    lives1=3;
+    score1=0;
+    food = { x: 6, y: 7 };             // The food
+    gainBuff = { x: 0, y: 0 };  // The gainBuff
+    gainBuffTimer = 0;          // The gainBuff timer
+    lives = 3;                    // Lives of the player
+    lastInputDir = { x: 0, y: 0 };
+    lastInputDir1 = { x: 0, y: 0 };
+    paused = 0;
+    fixedTime = NaN;
+    count = 0;
+    isPaused = false;
+    countbuff = 0;
+    countbuff1 = 0;
+    modalVanish = 0;
+    gridSizeChoice = 25;
+    countRestart=0;
+    Dir={x:0,y:1};
+    bomb={x:1,y:1};
+    portalOpen={x:3,y:3};
+    portalClose={x:gridSizeChoice-3,y:gridSizeChoice-3};
+    countBodyPause = 0;
+    countBodyPause1 = 0;
+    bombPause = 0;
+    gameOverTextVanish = 1;
+    bombAte =0;
+    bombAte1 =0;
+    letterPositions1 = [];
+    letterPositions = [];
+    randomBuff =gainBuffArray[Math.floor(Math.random() * gainBuffArray.length)];
+    saveGameCount = 0;
+    localStorage.setItem('saveGameCount', JSON.stringify(saveGameCount));
+}
 
 // The Words that will be displayed on grid for the snake to eat
 let words = ["AHOY", "ADIOS", "CIAO", "HOLA", "SALUT", "SHALOM", "NIT", "TRICHY", "BREAK", "CROWN", "DANCE", "EXTRA", "FLAME", "GRAPE", "HOUSE", "IVORY",
@@ -90,14 +137,10 @@ const gainBuffArray = [
 
 ];
 
-let randomBuff = gainBuffArray[Math.floor(Math.random() * gainBuffArray.length)];
-
-
 
 
 // Function that runs at set intervals
 function main(millisecondspassed) {
-  console.log(inputDir);
   // Check if the timer reaches 0
   if (timer <= 0) {
     gameOver();
@@ -176,16 +219,22 @@ function isCollide21(){
 function gridChoice(choice) {
   gridSizeChoice = choice;
   portalClose={x:gridSizeChoice-3,y:gridSizeChoice-3};
-  document.getElementById("modal").remove();
+  if (!saveGameCount){
+    document.getElementById("modal").remove();
+  }
+  
   modalVanish = 1;
-  if (paused){
+  if (paused && !saveGameCount){
     Resume();
   }
+  
   senseKeyPress();
   senseKeyPress1();
   gameLoop();
-  wordSpreader();
-  wordSpreader1();
+  if (!saveGameCount){
+    wordSpreader();
+    wordSpreader1();
+  }
   generateBomb();
 
 }
@@ -316,7 +365,7 @@ function generateGainBuffPosition() {
 // Generates a random word from the 'words' array and places it in random places on grid
 function wordSpreader() {
   // Generate a random word from the 'words' array
-  const randomWord = words[Math.floor(Math.random() * words.length)];
+  randomWord = words[Math.floor(Math.random() * words.length)];
   word.innerHTML = "The Word :<br>" + randomWord;
 
   // Clear the array which has the letter positions
@@ -343,7 +392,7 @@ function wordSpreader() {
 
 function wordSpreader1(){
   // Generate a random word from the 'words' array
-  const randomWord1 = words[Math.floor(Math.random() * words.length)];
+  randomWord1 = words[Math.floor(Math.random() * words.length)];
   word1.innerHTML = "The Word :<br>" + randomWord1;
 
   // Clear the array which has the letter positions
@@ -440,11 +489,12 @@ function gameOver() {
   countbuff = 0;
   lives = 3;
   lives1 = 3;
-  timerBox.innerHTML = "Timer : 120";
   life.innerHTML = "Lives Left : " + lives;
   life1.innerHTML = "Lives Left : " + lives1;
   scoreBox.innerHTML = "Score : " + score;
   scoreBox1.innerHTML = "Score : " + score1;
+  saveGameCount = 0; // Update saveGameCount to indicate game is saved
+  localStorage.setItem('saveGameCount', JSON.stringify(saveGameCount));
 
   return; // Exit the game engine function to stop the game loop
 }
@@ -602,6 +652,10 @@ function gameEngine() {
 
   if (isCollide21()){
     gameResumeCollideSelf1();
+  }
+
+  if (lives <0 || lives1 <0){
+    gameOver();
   }
 
   // Check if the snake head collides with the buff
@@ -1037,7 +1091,7 @@ function senseKeyPress() {
     if (!paused && modalVanish === 1) { // Check if the game is not paused
       switch (e.key) {
         case "ArrowUp":
-          if (inputDir.y !== 1) { // Check if the current direction is not opposite
+          if ((snakeArr[0].y - snakeArr[1].y) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -1047,7 +1101,7 @@ function senseKeyPress() {
           break;
 
         case "ArrowDown":
-          if (inputDir.y !== -1) { // Check if the current direction is not opposite
+          if ((snakeArr[1].y - snakeArr[0].y) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -1057,7 +1111,7 @@ function senseKeyPress() {
           break;
 
         case "ArrowLeft":
-          if (inputDir.x !== 1) { // Check if the current direction is not opposite
+          if ((snakeArr[0].x - snakeArr[1].x) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -1067,7 +1121,7 @@ function senseKeyPress() {
           break;
 
         case "ArrowRight":
-          if (inputDir.x !== -1) { // Check if the current direction is not opposite
+          if ((snakeArr[1].x - snakeArr[0].x) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -1085,23 +1139,25 @@ function senseKeyPress() {
 
 
 function senseKeyPress1(){
+  
   // Response to keypress
   window.addEventListener('keydown', e => {
-    if (!paused && modalVanish===1) { // Check if the game is not paused
+    
+    if (!paused && modalVanish===1) { 
+      // Check if the game is not paused
       switch (e.key) {
         case "w":
-          if (inputDir1.y !== 1) { // Check if the current direction is not opposite
+          if ((snakeArr1[0].y - snakeArr1[1].y) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause1 = 1;
-            console.log("w")
             inputDir1.x = 0;
             inputDir1.y = -1;
             break;
           }
 
         case "s":
-          if (inputDir1.y !== -1) { // Check if the current direction is not opposite
+          if ((snakeArr1[1].y - snakeArr1[0].y) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause1 = 1;
@@ -1111,7 +1167,7 @@ function senseKeyPress1(){
           }
 
         case "a":
-          if (inputDir1.x !== 1) { // Check if the current direction is not opposite
+          if ((snakeArr1[0].x - snakeArr1[1].x) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause1 = 1;
@@ -1121,7 +1177,7 @@ function senseKeyPress1(){
           }
 
         case "d":
-          if (inputDir1.x !== -1) { // Check if the current direction is not opposite
+          if ((snakeArr1[1].x - snakeArr1[0].x) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause1 = 1;
@@ -1174,7 +1230,7 @@ function moveSnake(direction) {
     inputDir = { x: 0, y: 0 };
     switch (direction) {
       case 'up':
-        if (inputDir.y!=1){
+        if ((snakeArr[0].y - snakeArr[1].y) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause = 1;
@@ -1184,7 +1240,7 @@ function moveSnake(direction) {
         }
         
       case 'down':
-        if (inputDir.y!=-1){
+        if ((snakeArr[1].y - snakeArr[0].y) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause = 1;
@@ -1193,7 +1249,7 @@ function moveSnake(direction) {
           break;
         }
       case 'left':
-        if (inputDir.x!=1){
+        if ((snakeArr[0].x - snakeArr[1].x) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause = 1;
@@ -1202,7 +1258,7 @@ function moveSnake(direction) {
           break;
         }
       case 'right':
-        if (inputDir.x!=-1){
+        if ((snakeArr[1].x - snakeArr[0].x) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause = 1;
@@ -1222,7 +1278,7 @@ function moveSnake1(direction){
     inputDir1 = { x: 0, y: 0 };
     switch (direction) {
       case 'up':
-        if (inputDir1.y!=1){
+        if ((snakeArr1[0].y - snakeArr1[1].y) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause1 = 1;
@@ -1231,7 +1287,7 @@ function moveSnake1(direction){
           break;
         }
       case 'down':
-        if (inputDir1.y!=-1){
+        if ((snakeArr1[1].y - snakeArr1[0].y) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause1 = 1;
@@ -1240,7 +1296,7 @@ function moveSnake1(direction){
           break;
         }
       case 'left':
-        if (inputDir1.x!=1){
+        if ((snakeArr1[0].x - snakeArr1[1].x) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause1 = 1;
@@ -1249,7 +1305,7 @@ function moveSnake1(direction){
           break;
         }
       case 'right':
-        if (inputDir1.x!=-1){
+        if ((snakeArr1[1].x - snakeArr1[0].x) != 1){
           gameLoop();
           moveSound.play();
           countBodyPause1 = 1;
@@ -1269,6 +1325,9 @@ function pauseResumeButtons(){
 
   const resumeButton = document.getElementById('resumeButton');
   resumeButton.addEventListener('click', () => Resume())
+
+  const saveButton = document.getElementById('saveGameButton');
+  saveButton.addEventListener('click', () => saveGame())
 
   pauseButton.disabled = true;
   resumeButton.disabled = true;
@@ -1309,7 +1368,10 @@ function pauseLoop() {
     resumeButton.disabled = false;
     pauseButton.disabled = true;
     saveGameButton.disabled = false;
-    fixedTime = timer;
+    if (!saveGameCount){
+      fixedTime = timer;
+    }
+    
     timer = NaN;
     clearInterval(myInterval);
     myInterval = setInterval(main, Math.ceil(1000 / speed), Math.ceil(1000 / speed));
@@ -1337,12 +1399,159 @@ function quit(){
   window.close();
 }
 
+// Save savegamecount separatl
+
+function saveGame() {
+  // Save game data to localStorage
+  const gameData = {
+    snakeArr: snakeArr,
+    timer: timer,
+    speed: speed,
+    lastPaintTime: lastPaintTime,
+    score: score,
+    snakeArr1 : snakeArr1,
+    speed1: score1,
+    inputDir: inputDir,
+    inputDir1: inputDir1,
+    lives1: lives1,
+    score1: score1,
+    food: food,
+    gainBuff: gainBuff,
+    gainBuffTimer: gainBuffTimer,
+    lives: lives,
+    lastInputDir: lastInputDir,
+    lastInputDir1: lastInputDir1,
+    paused: paused,
+    fixedTime: fixedTime,
+    count: count,
+    isPaused: isPaused,
+    countbuff: countbuff,
+    countbuff1: countbuff1,
+    modalVanish: modalVanish,
+    gridSizeChoice: gridSizeChoice,
+    countRestart: countRestart,
+    Dir: Dir,
+    bomb: bomb,
+    portalOpen: portalOpen,
+    portalClose: portalClose,
+    countBodyPause: countBodyPause,
+    countBodyPause1: countBodyPause1,
+    bombPause: bombPause,
+    gameOverTextVanish: gameOverTextVanish,
+    bombAte: bombAte,
+    bombAte1:bombAte1,
+    randomBuff: randomBuff,
+    letterPositions: letterPositions,
+    letterPositions1: letterPositions1,
+    randomWord: randomWord,
+    randomWord1: randomWord1
+    
+  };
+  localStorage.setItem('gameData', JSON.stringify(gameData));
+
+  saveGameCount = 1; // Update saveGameCount to indicate game is saved
+  localStorage.setItem('saveGameCount', JSON.stringify(saveGameCount));
+  
+  alert('Game Saved');
+
+  // Close the window
+  window.close();
+}
+
+function loadGame() {
+  const savedGameData = localStorage.getItem('gameData');
+  if (savedGameData) {
+    const gameData = JSON.parse(savedGameData);
+
+    // Load the saved game data into the game variables
+    snakeArr = gameData.snakeArr;
+    timer = gameData.timer;
+    speed = gameData.speed;
+    lastPaintTime = gameData.lastPaintTime;
+    score = gameData.score;
+    snakeArr1 = gameData.snakeArr1;
+    speed1 = gameData.speed1;
+    inputDir = gameData.inputDir;
+    inputDir1 = gameData.inputDir1;
+    lives1 = gameData.lives1;
+    score1 = gameData.score1;
+    food = gameData.food;
+    gainBuff = gameData.gainBuff;
+    gainBuffTimer = gameData.gainBuffTimer;
+    lives = gameData.lives;
+    lastInputDir = gameData.lastInputDir;
+    lastInputDir1 = gameData.lastInputDir1;
+    paused = gameData.paused;
+    fixedTime = gameData.fixedTime;
+    count = gameData.count;
+    isPaused = gameData.isPaused;
+    countbuff = gameData.countbuff;
+    countbuff1 = gameData.countbuff1;
+    modalVanish = gameData.modalVanish;
+    gridSizeChoice = gameData.gridSizeChoice;
+    countRestart = gameData.countRestart;
+    Dir = gameData.Dir;
+    bomb = gameData.bomb;
+    portalOpen = gameData.portalOpen;
+    portalClose = gameData.portalClose;
+    countBodyPause = gameData.countBodyPause;
+    countBodyPause1 = gameData.countBodyPause1;
+    bombPause = gameData.bombPause;
+    gameOverTextVanish = gameData.gameOverTextVanish;
+    bombAte = gameData.bombAte;
+    bombAte1 = gameData.bombAte1;
+    randomBuff = gameData.randomBuff;
+    letterPositions = gameData.letterPositions;
+    letterPositions1 = gameData.letterPositions1;
+    randomWord = gameData.randomWord;
+    randomWord1 = gameData.randomWord1;
+  }
+
+  life.innerHTML = "Lives Left : " + lives;
+  life1.innerHTML = "Lives Left : " + lives1;
+  scoreBox.innerHTML = "Score : " + score;
+  scoreBox1.innerHTML = "Score : " + score1;
+  word.innerHTML = "The Word :<br>" + randomWord;
+  word1.innerHTML = "The Word :<br>" + randomWord1;
+
+}
+
+
 // Main logic starts here
 musicSound.play();
 
-gridSize();
-addHiScore();
-addHiScore1();
-onScreenButtons();
-onScreenButtons1();
-pauseResumeButtons()
+let savedGameCount = localStorage.getItem("saveGameCount");
+if(savedGameCount){
+  saveGameCount = JSON.parse(savedGameCount);
+}
+
+if (performance.navigation.type === 1) {
+  saveGameCount = 0; // Update saveGameCount to indicate game is saved
+  localStorage.setItem('saveGameCount', JSON.stringify(saveGameCount));
+}
+
+
+if (saveGameCount === 1){
+  loadGame();
+  pauseResumeButtons();
+  pauseLoop();
+  gridChoice(gridSizeChoice);
+  addHiScore();
+  addHiScore1();
+  onScreenButtons();
+  onScreenButtons1();
+  
+}
+
+else{
+  initalValVariables();
+  gridSize();
+  addHiScore();
+  addHiScore1();
+  onScreenButtons();
+  onScreenButtons1();
+  pauseResumeButtons();
+}
+
+
+
