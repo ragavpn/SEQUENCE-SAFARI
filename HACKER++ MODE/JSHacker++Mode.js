@@ -1518,7 +1518,7 @@ function loadGame() {
 
 
 // Main logic starts here
-musicSound.play();
+
 
 let savedGameCount = localStorage.getItem("saveGameCount");
 if(savedGameCount){
@@ -1532,6 +1532,7 @@ if (performance.navigation.type === 1) {
 
 
 if (saveGameCount === 1){
+  musicSound.play();
   loadGame();
   pauseResumeButtons();
   pauseLoop();
@@ -1544,6 +1545,7 @@ if (saveGameCount === 1){
 }
 
 else{
+  musicSound.play();
   initalValVariables();
   gridSize();
   addHiScore();
