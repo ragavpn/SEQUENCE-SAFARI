@@ -32,7 +32,6 @@ let gridSizeChoice = 25;
 let countRestart=0;
 let countBodyPause = 0;
 let countBuff=0;
-let gameOverTextVanish = 1;
 
 // Create an array to store the positions of the letters in the word
 const letterPositions = [];
@@ -113,6 +112,7 @@ function isCollideWall(snake) {
 
 function gridChoice(choice) {
   gridSizeChoice = choice;
+  console.log(gridSizeChoice);
   document.getElementById("modal").remove();
   modalVanish = 1;
   if (paused){
@@ -121,7 +121,6 @@ function gridChoice(choice) {
   senseKeyPress();
   gameLoop();
   wordSpreader();
-  pauseResumeButtons();
 
 }
 
@@ -309,6 +308,7 @@ function gameResume() {
 
 }
 
+
 // Game resume logic for when the snake collides with the wall
 function gameResumeCollideWall() {
   if (snakeArr[0].y <=0) {
@@ -346,7 +346,6 @@ function gameResumeCollideSelf() {
   for (let j=0; j<length; j++) {
     if (15+j<gridSizeChoice){
       snakeArr.push({x:13,y:15+j});
-      console.log({x:13,y:15+j});
     }
     else{
       snakeArr.push({x:13-j,y:gridSizeChoice});
@@ -572,7 +571,7 @@ function senseKeyPress() {
     if (!paused && modalVanish === 1) { // Check if the game is not paused
       switch (e.key) {
         case "ArrowUp":
-          if (inputDir.y !== 1) { // Check if the current direction is not opposite
+          if ((snakeArr[0].y - snakeArr[1].y) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -582,7 +581,7 @@ function senseKeyPress() {
           break;
 
         case "ArrowDown":
-          if (inputDir.y !== -1) { // Check if the current direction is not opposite
+          if ((snakeArr[1].y - snakeArr[0].y) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -592,7 +591,7 @@ function senseKeyPress() {
           break;
 
         case "ArrowLeft":
-          if (inputDir.x !== 1) { // Check if the current direction is not opposite
+          if ((snakeArr[0].x - snakeArr[1].x) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -602,7 +601,7 @@ function senseKeyPress() {
           break;
 
         case "ArrowRight":
-          if (inputDir.x !== -1) { // Check if the current direction is not opposite
+          if ((snakeArr[1].x - snakeArr[0].x) != 1) { // Check if the current direction is not opposite
             gameLoop();
             moveSound.play();
             countBodyPause = 1;
@@ -639,39 +638,48 @@ function moveSnake(direction) {
     inputDir = { x: 0, y: 0 };
     switch (direction) {
       case 'up':
-        gameLoop();
-        moveSound.play();
-        countBodyPause=1;
-        inputDir.x = 0;
-        inputDir.y = -1;
-        break;
+        if ((snakeArr[0].y - snakeArr[1].y) != 1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = 0;
+          inputDir.y = -1;
+          break;
+        }
+        
       case 'down':
-        gameLoop();
-        moveSound.play();
-        countBodyPause=1;
-        inputDir.x = 0;
-        inputDir.y = 1;
-        break;
+        if ((snakeArr[1].y - snakeArr[0].y) != 1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = 0;
+          inputDir.y = 1;
+          break;
+        }
       case 'left':
-        gameLoop();
-        moveSound.play();
-        countBodyPause=1;
-        inputDir.x = -1;
-        inputDir.y = 0;
-        break;
+        if ((snakeArr[0].x - snakeArr[1].x) != 1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = -1;
+          inputDir.y = 0;
+          break;
+        }
       case 'right':
-        gameLoop();
-        moveSound.play();
-        countBodyPause=1;
-        inputDir.x = 1;
-        inputDir.y = 0;
-        break;
+        if ((snakeArr[1].x - snakeArr[0].x) != 1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = 1;
+          inputDir.y = 0;
+          break;
+        }
       default:
+
         break;
     }
   }
 }
-
 function pauseResumeButtons(){
   const pauseButton = document.getElementById('pauseButton');
   pauseButton.addEventListener('click', () => Pause());
@@ -742,4 +750,4 @@ musicSound.play();
 gridSize();
 addHiScore();
 onScreenButtons();
-pauseResumeButtons();
+pauseResumeButtons()
