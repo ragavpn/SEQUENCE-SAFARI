@@ -21,10 +21,11 @@
 
 
 }
+
 .uiDiv{
   width: 90vmin;
   height: 90vmin;
-  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  background: linear-gradient(rgb(44, 99, 44),rgb(32, 31, 31));
   border: 4px solid black;
   opacity: 0.95;
   display: flex;
@@ -33,6 +34,79 @@
   flex-direction: column;
   border-radius: 3vmin;
 
+}
+
+.gameOverText{
+  font-size: 6vmin;
+  font-family: 'Creepster', cursive;
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border: 4px solid black;
+  padding: 5px 10px 5px 10px;
+  margin-bottom: 0.7rem;
+  border-radius: 1.5vmin;
+  height: 7vmin;
+  width: 27vmin;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 3vmin;
+}
+
+.restartButton{
+  font-size: 4vmin;
+  font-family: 'Creepster', cursive;
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border: 4px solid black;
+  padding-top:5px;
+  padding-bottom:5px;
+  padding-left:10px;
+  padding-right:10px;
+  margin-bottom: 1.7rem;
+  border-radius: 1.5vmin;
+  height: 7vmin;
+  width: 15vmin;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.4s;
+  margin-right: 2vmin;
+}
+
+.restartButton:hover{
+  background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+  cursor: pointer;
+}
+
+.quitButton{
+  font-size: 4vmin;
+  font-family: 'Creepster', cursive;
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border: 4px solid black;
+  padding-top:5px;
+  padding-bottom:5px;
+  padding-left:10px;
+  padding-right:10px;
+  margin-bottom: 1.7rem;
+  border-radius: 1.5vmin;
+  height: 7vmin;
+  width: 10vmin;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.4s;
+}
+
+.scoreText{
+  font-size: 3vmin;
+  font-family: 'Creepster', cursive;
+  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  border: 4px solid black;
+  border-radius: 1.5vmin;
+  padding: 5px 10px 5px 10px;
+  height: 3.5vmin;
+  width: 15vmin;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 1vmin;
 }
 
 .text{
@@ -76,7 +150,7 @@
 .gameOverDiv{
   width: 50vmin;
   height: 50vmin;
-  background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
+  background: linear-gradient(rgb(44, 99, 44),rgb(32, 31, 31));
   border: 4px solid black;
   opacity: 0.95;
   display: flex;
@@ -85,21 +159,13 @@
   flex-direction: column;
   border-radius: 3vmin;
 }
-
-.gameOverText{
-    font-size: 6vmin;
-    font-family: 'Creepster', cursive;
-    background: linear-gradient(rgb(181, 214, 80),rgb(137, 230, 124));
-    border: 4px solid black;
-    padding: 5px 10px 5px 10px;
-    margin-bottom: 0.7rem;
-    border-radius: 1.5vmin;
-    height: 14vmin;
-    width: 30vmin;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 3vmin;
+.gameOverButtons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: row;
+  margin-top: 3vmin;
 }
 
 .startButton{
@@ -435,7 +501,7 @@ body{
   margin-left: 1rem;
   position: relative;
   left: 15vmax;
-  bottom: 14vmax;
+  bottom: 16vmax;
 }
 
 .buttonBox{

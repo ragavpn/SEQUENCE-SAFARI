@@ -97,7 +97,7 @@ let randomBuff = gainBuffArray[Math.floor(Math.random() * gainBuffArray.length)]
 
 // Function that runs at set intervals
 function main(millisecondspassed) {
-
+  console.log(inputDir);
   // Check if the timer reaches 0
   if (timer <= 0) {
     gameOver();
@@ -351,7 +351,6 @@ function wordSpreader1(){
 
   // Generate random positions for each letter in the word
   randomWord1.split('').forEach((letter) => {
-    console.log("letter")
     let letterPosition1 = { x: 0, y: 0 };
     do {
       letterPosition1 = {
@@ -401,10 +400,10 @@ function gameOver() {
   inputDir = { x: 0, y: 0 };
   inputDir1 = { x: 0, y: 0 };
   Pause();
-  if (lives === 0){
+  if (lives < 1){
     gameOverDiv(1);
   }
-  else if (lives1 === 0){
+  else if (lives1 < 1){
     gameOverDiv(2);
   }
 
@@ -441,6 +440,7 @@ function gameOver() {
   countbuff = 0;
   lives = 3;
   lives1 = 3;
+  timerBox.innerHTML = "Timer : 120";
   life.innerHTML = "Lives Left : " + lives;
   life1.innerHTML = "Lives Left : " + lives1;
   scoreBox.innerHTML = "Score : " + score;
@@ -536,7 +536,6 @@ function gameResumeCollideSelf() {
   for (let j=0; j<length; j++) {
     if (15+j<gridSizeChoice){
       snakeArr.push({x:13,y:15+j});
-      console.log({x:13,y:15+j});
     }
     else{
       snakeArr.push({x:13-j,y:gridSizeChoice});
@@ -573,7 +572,7 @@ function gameEngine() {
   bombPause=0;
 
   // Part 1: updating the snake array and food
-  if ((isCollide(snakeArr) && lives === 0)) {
+  if ((isCollide(snakeArr) && lives < 1)) {
     gameOver();
   }
   else if ((isCollide(snakeArr) && lives != 0)) {
@@ -585,7 +584,7 @@ function gameEngine() {
     }
   }
 
-  if ((isCollide(snakeArr1) && lives1 === 0)) {
+  if ((isCollide(snakeArr1) && lives1 < 1)) {
     gameOver();
   }
   else if ((isCollide(snakeArr1) && lives1 != 0)) {
@@ -717,7 +716,7 @@ function gameEngine() {
     (letterPositions.length > 0 &&
       letterPositions.slice(1).some((letter) => {
         return letter.x === snakeArr[0].x && letter.y === snakeArr[0].y;
-      })) && lives === 0
+      })) && lives < 1
   ) gameOver();
 
   // Checking if snake at any other letter and any lives are left
@@ -725,7 +724,7 @@ function gameEngine() {
     (letterPositions.length > 0 &&
       letterPositions.slice(1).some((letter) => {
         return letter.x === snakeArr[0].x && letter.y === snakeArr[0].y;
-      })) && lives != 0
+      })) && lives >0
   ) {
     gameResume();
   }
@@ -782,7 +781,7 @@ function gameEngine() {
     (letterPositions1.length > 0 &&
       letterPositions1.slice(1).some((letter) => {
         return letter.x === snakeArr1[0].x && letter.y === snakeArr1[0].y;
-      })) && lives1 === 0
+      })) && lives1 < 1
   ) gameOver();
 
   // Checking if snake at any other letter and any lives are left
@@ -790,7 +789,7 @@ function gameEngine() {
     (letterPositions1.length > 0 &&
       letterPositions1.slice(1).some((letter) => {
         return letter.x === snakeArr1[0].x && letter.y === snakeArr1[0].y;
-      })) && lives1 != 0
+      })) && lives1 >0
   ) {
     gameResume1();
   }
@@ -1035,38 +1034,46 @@ function gameLoop() {
 function senseKeyPress() {
   // Response to keypress
   window.addEventListener('keydown', e => {
-    if (!paused && modalVanish===1) { // Check if the game is not paused
+    if (!paused && modalVanish === 1) { // Check if the game is not paused
       switch (e.key) {
         case "ArrowUp":
-          gameLoop();
-          moveSound.play();
-          countBodyPause = 1;
-          inputDir.x = 0;
-          inputDir.y = -1;
+          if (inputDir.y !== 1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = 0;
+            inputDir.y = -1;
+          }
           break;
 
         case "ArrowDown":
-          gameLoop();
-          moveSound.play();
-          countBodyPause = 1;
-          inputDir.x = 0;
-          inputDir.y = 1;
+          if (inputDir.y !== -1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = 0;
+            inputDir.y = 1;
+          }
           break;
 
         case "ArrowLeft":
-          gameLoop();
-          moveSound.play();
-          countBodyPause = 1;
-          inputDir.x = -1;
-          inputDir.y = 0;
+          if (inputDir.x !== 1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = -1;
+            inputDir.y = 0;
+          }
           break;
 
         case "ArrowRight":
-          gameLoop();
-          moveSound.play();
-          countBodyPause = 1;
-          inputDir.x = 1;
-          inputDir.y = 0;
+          if (inputDir.x !== -1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = 1;
+            inputDir.y = 0;
+          }
           break;
 
         default:
@@ -1076,44 +1083,52 @@ function senseKeyPress() {
   });
 }
 
+
 function senseKeyPress1(){
-  console.log(paused,modalVanish)
   // Response to keypress
   window.addEventListener('keydown', e => {
     if (!paused && modalVanish===1) { // Check if the game is not paused
       switch (e.key) {
         case "w":
-          gameLoop();
-          moveSound.play();
-          countBodyPause1 = 1;
-          console.log("w")
-          inputDir1.x = 0;
-          inputDir1.y = -1;
-          break;
+          if (inputDir1.y !== 1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause1 = 1;
+            console.log("w")
+            inputDir1.x = 0;
+            inputDir1.y = -1;
+            break;
+          }
 
         case "s":
-          gameLoop();
-          moveSound.play();
-          countBodyPause1 = 1;
-          inputDir1.x = 0;
-          inputDir1.y = 1;
-          break;
+          if (inputDir1.y !== -1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause1 = 1;
+            inputDir1.x = 0;
+            inputDir1.y = 1;
+            break;
+          }
 
         case "a":
-          gameLoop();
-          moveSound.play();
-          countBodyPause1 = 1;
-          inputDir1.x = -1;
-          inputDir1.y = 0;
-          break;
+          if (inputDir1.x !== 1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause1 = 1;
+            inputDir1.x = -1;
+            inputDir1.y = 0;
+            break;
+          }
 
         case "d":
-          gameLoop();
-          moveSound.play();
-          countBodyPause1 = 1;
-          inputDir1.x = 1;
-          inputDir1.y = 0;
-          break;
+          if (inputDir1.x !== -1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause1 = 1;
+            inputDir1.x = 1;
+            inputDir1.y = 0;
+            break;
+          }
           
         default:
           break;
@@ -1159,33 +1174,42 @@ function moveSnake(direction) {
     inputDir = { x: 0, y: 0 };
     switch (direction) {
       case 'up':
-        gameLoop();
-        moveSound.play();
-        countBodyPause = 1;
-        inputDir.x = 0;
-        inputDir.y = -1;
-        break;
+        if (inputDir.y!=1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = 0;
+          inputDir.y = -1;
+          break;
+        }
+        
       case 'down':
-        gameLoop();
-        moveSound.play();
-        countBodyPause = 1;
-        inputDir.x = 0;
-        inputDir.y = 1;
-        break;
+        if (inputDir.y!=-1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = 0;
+          inputDir.y = 1;
+          break;
+        }
       case 'left':
-        gameLoop();
-        moveSound.play();
-        countBodyPause = 1;
-        inputDir.x = -1;
-        inputDir.y = 0;
-        break;
+        if (inputDir.x!=1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = -1;
+          inputDir.y = 0;
+          break;
+        }
       case 'right':
-        gameLoop();
-        moveSound.play();
-        countBodyPause = 1;
-        inputDir.x = 1;
-        inputDir.y = 0;
-        break;
+        if (inputDir.x!=-1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause = 1;
+          inputDir.x = 1;
+          inputDir.y = 0;
+          break;
+        }
       default:
 
         break;
@@ -1198,33 +1222,41 @@ function moveSnake1(direction){
     inputDir1 = { x: 0, y: 0 };
     switch (direction) {
       case 'up':
-        gameLoop();
-        moveSound.play();
-        countBodyPause1 = 1;
-        inputDir1.x = 0;
-        inputDir1.y = -1;
-        break;
+        if (inputDir1.y!=1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = 0;
+          inputDir1.y = -1;
+          break;
+        }
       case 'down':
-        gameLoop();
-        moveSound.play();
-        countBodyPause1 = 1;
-        inputDir1.x = 0;
-        inputDir1.y = 1;
-        break;
+        if (inputDir1.y!=-1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = 0;
+          inputDir1.y = 1;
+          break;
+        }
       case 'left':
-        gameLoop();
-        moveSound.play();
-        countBodyPause1 = 1;
-        inputDir1.x = -1;
-        inputDir1.y = 0;
-        break;
+        if (inputDir1.x!=1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = -1;
+          inputDir1.y = 0;
+          break;
+        }
       case 'right':
-        gameLoop();
-        moveSound.play();
-        countBodyPause1 = 1;
-        inputDir1.x = 1;
-        inputDir1.y = 0;
-        break;
+        if (inputDir1.x!=-1){
+          gameLoop();
+          moveSound.play();
+          countBodyPause1 = 1;
+          inputDir1.x = 1;
+          inputDir1.y = 0;
+          break;
+        }
       default:
         break;
     }

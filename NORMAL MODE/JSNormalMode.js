@@ -13,7 +13,7 @@ let lastPaintTime=0;   // Last time the screen was painted
 let score=0            // Score of the game
 let snakeArr=[
     {x:13,y:15},
-    {X:13,y:16},
+    {x:13,y:16},
     {x:13,y:17}
 ]
 let food={x:6,y:7};    // The food
@@ -90,7 +90,7 @@ function gameOver(){
     alert("Game Over. Press any key to play again!");
     snakeArr=[
       {x:13,y:15},
-      {X:13,y:16},
+      {x:13,y:16},
       {x:13,y:17}
   ]
     musicSound.play();
@@ -244,11 +244,11 @@ gameLoop();
 window.addEventListener('keydown',e =>{
     switch (e.key) {
         case "ArrowUp":
-            gameLoop();
-            moveSound.play();  
-            inputDir.x=0;
-            inputDir.y=-1;
-            break;
+              gameLoop();
+              moveSound.play();  
+              inputDir.x=0;
+              inputDir.y=-1;
+              break;
 
         case "ArrowDown":
             gameLoop();

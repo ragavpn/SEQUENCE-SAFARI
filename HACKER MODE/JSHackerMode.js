@@ -32,6 +32,7 @@ let gridSizeChoice = 25;
 let countRestart=0;
 let countBodyPause = 0;
 let countBuff=0;
+let gameOverTextVanish = 1;
 
 // Create an array to store the positions of the letters in the word
 const letterPositions = [];
@@ -112,7 +113,6 @@ function isCollideWall(snake) {
 
 function gridChoice(choice) {
   gridSizeChoice = choice;
-  console.log(gridSizeChoice);
   document.getElementById("modal").remove();
   modalVanish = 1;
   if (paused){
@@ -121,6 +121,7 @@ function gridChoice(choice) {
   senseKeyPress();
   gameLoop();
   wordSpreader();
+  pauseResumeButtons();
 
 }
 
@@ -138,22 +139,30 @@ function gridSize() {
   let button1 = document.createElement('button');
   let button2 = document.createElement('button');
   let button3 = document.createElement('button');
+  let button4 = document.createElement('button');
+  let button5 = document.createElement('button');
 
   button1.textContent = "EASY";
-  button2.textContent = "MEDIUM";
+  button2.textContent = "NORMAL";
   button3.textContent = "HARD";
+  button4.textContent = "INSANE";
+  button5.textContent = "IMPOSSIBLE";
   
 
   textBegin.classList.add("text");
   button1.classList.add("gridButton");
   button2.classList.add("gridButton");
   button3.classList.add("gridButton");
+  button4.classList.add("gridButton");
+  button5.classList.add("gridButton");
   
 
   uiDiv.appendChild(textBegin);
   uiDiv.appendChild(button1);
   uiDiv.appendChild(button2);
   uiDiv.appendChild(button3);
+  uiDiv.appendChild(button4);
+  uiDiv.appendChild(button5);
 
   parentDiv.appendChild(uiDiv);
   document.body.appendChild(parentDiv);
@@ -161,8 +170,9 @@ function gridSize() {
   button1.addEventListener('click', () => gridChoice(20));
   button2.addEventListener('click', () => gridChoice(25));
   button3.addEventListener('click', () => gridChoice(30));
+  button4.addEventListener('click', () => gridChoice(35));
+  button5.addEventListener('click', () => gridChoice(40));
   textBegin.textContent = "Choose Difficulty";
-
 }
 
 
@@ -213,17 +223,62 @@ function wordSpreader() {
   });
 }
 
+function gameOverDiv(){
+  gameOverTextVanish = 0;
+  let parentDiv = document.createElement("div");
+  parentDiv.classList.add("modal"); 
+  parentDiv.id = "modal"
+
+  let gameOverDiv = document.createElement("div");
+  gameOverDiv.classList.add("gameOverDiv");
+
+  let gameOverText = document.createElement("div");
+  let scoreText = document.createElement("div");
+  let restartButton = document.createElement("button");
+  let quitButton = document.createElement("button");
+
+  let buttonContainer=document.createElement("div");
+  buttonContainer.classList.add("gameOverButtons");
+
+  gameOverText.textContent = "GAME OVER";
+  scoreText.textContent = "Score : " + score;
+
+  restartButton.textContent = "Restart";
+  quitButton.textContent = "Quit";
+
+  gameOverText.classList.add("gameOverText");
+  scoreText.classList.add("scoreText");
+  restartButton.classList.add("restartButton");
+  quitButton.classList.add("quitButton");
+
+  gameOverDiv.appendChild(gameOverText);
+  gameOverDiv.appendChild(scoreText);
+  
+  buttonContainer.appendChild(restartButton);
+  buttonContainer.appendChild(quitButton);
+
+  gameOverDiv.appendChild(buttonContainer);
+
+  parentDiv.appendChild(gameOverDiv);
+  document.body.appendChild(parentDiv);
+
+  restartButton.addEventListener('click', () => restart());
+  quitButton.addEventListener('click', () => quit());
+
+}
+
 // Game Over logic
 function gameOver() {
   musicSound.pause();
   gameOverSound.play();
   inputDir = { x: 0, y: 0 };
-  alert("Game Over. Press any key to play again!");
+  Pause();
+  if (lives < 1){
+    gameOverDiv();
+  }
   modalVanish = 0;
   countRestart= 1;
   countBodyPause = 0;
-  Pause();
-  gridSize();
   snakeArr=[
     {x:13,y:15},
     {x:13,y:16},
@@ -235,6 +290,7 @@ function gameOver() {
   speed = 8;
   countBuff=0;
   lives = 3;
+  timerBox.innerHTML = "Timer : 120";
   life.innerHTML = "Lives Left: " + lives;
   scoreBox.innerHTML = "Score: " + score;
 
@@ -247,7 +303,6 @@ function gameResume() {
   wordSpreader();
   loselifesound.play();
   countBodyPause = 0;
-  alert("Lost 1 life. Be Careful");
   lives--;
   life.innerHTML = "Lives Left: " + lives;
   inputDir = { x: 0, y: 0 };
@@ -279,7 +334,6 @@ function gameResumeCollideWall() {
 
   wordSpreader();
   loselifesound.play();
-  alert("Lost 1 life. Be Careful");
   lives--;
   life.innerHTML = "Lives Left: " + lives;
 }
@@ -298,6 +352,11 @@ function gameResumeCollideSelf() {
       snakeArr.push({x:13-j,y:gridSizeChoice});
     }
   }
+
+  wordSpreader();
+  loselifesound.play();
+  lives--;
+  life.innerHTML = "Lives Left : " + lives;
 }
 
 //Game running logic
@@ -510,38 +569,46 @@ function gameLoop() {
 function senseKeyPress() {
   // Response to keypress
   window.addEventListener('keydown', e => {
-    if (!paused && modalVanish===1) { // Check if the game is not paused
+    if (!paused && modalVanish === 1) { // Check if the game is not paused
       switch (e.key) {
         case "ArrowUp":
-          gameLoop();
-          moveSound.play();
-          countBodyPause=1;
-          inputDir.x = 0;
-          inputDir.y = -1;
+          if (inputDir.y !== 1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = 0;
+            inputDir.y = -1;
+          }
           break;
 
         case "ArrowDown":
-          gameLoop();
-          moveSound.play();
-          countBodyPause=1;
-          inputDir.x = 0;
-          inputDir.y = 1;
+          if (inputDir.y !== -1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = 0;
+            inputDir.y = 1;
+          }
           break;
 
         case "ArrowLeft":
-          gameLoop();
-          moveSound.play();
-          countBodyPause=1;
-          inputDir.x = -1;
-          inputDir.y = 0;
+          if (inputDir.x !== 1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = -1;
+            inputDir.y = 0;
+          }
           break;
 
         case "ArrowRight":
-          gameLoop();
-          moveSound.play();
-          countBodyPause=1;
-          inputDir.x = 1;
-          inputDir.y = 0;
+          if (inputDir.x !== -1) { // Check if the current direction is not opposite
+            gameLoop();
+            moveSound.play();
+            countBodyPause = 1;
+            inputDir.x = 1;
+            inputDir.y = 0;
+          }
           break;
 
         default:
@@ -659,10 +726,20 @@ function pauseLoop() {
   }
 }
 
+function restart(){
+  gameOverTextVanish = 1;
+  document.getElementById("modal").remove();
+  gridSize();
+}
+
+function quit(){
+  window.close();
+}
+
 // Main logic starts here
 musicSound.play();
 
 gridSize();
 addHiScore();
 onScreenButtons();
-pauseResumeButtons()
+pauseResumeButtons();
