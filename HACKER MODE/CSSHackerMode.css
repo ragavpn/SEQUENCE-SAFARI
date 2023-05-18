@@ -629,7 +629,7 @@ body{
   }
 
   .gridButton{
-    font-size: 2vmax;
+    font-size: 1.8vmax;
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
     margin-bottom: 1.7vmax;
     height: 5vmax;
