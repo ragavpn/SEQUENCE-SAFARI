@@ -625,16 +625,19 @@ body{
 
   .text{
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    margin-bottom: 10vmin;
+    margin-bottom: 7vmin;
   }
 
   .gridButton{
     font-size: 2vmax;
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    margin-bottom: 2.5vmax;
+    height: 5vmax;
   }
 
   .gridButton:hover{
     background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
+    
   }
 
   .restartButton{
