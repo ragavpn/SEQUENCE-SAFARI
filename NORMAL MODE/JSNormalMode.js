@@ -67,32 +67,6 @@ function isCollide(snake) {
   }
 
 
-// Generates a random word from the 'words' array and places it in random places on grid
-// function wordSpreader(){  
-//   // Generate a random word from the 'words' array
-//   const randomWord = words[Math.floor(Math.random() * words.length)];
-//   word.innerHTML = "The Word:<br>" + randomWord;
-
-//   // Clear the array which has the letter positions
-//   letterPositions.length = 0;
-
-//   // Generate random positions for each letter in the word
-//   randomWord.split('').forEach((letter) => {
-//       let letterPosition = { x: 0, y: 0 };
-//       do {
-//           letterPosition = {
-//               x: Math.floor(Math.random() * 23)+2,
-//               y: Math.floor(Math.random() * 23)+2,
-//             };
-//           } while (snakeArr.some((part) => part.x === letterPosition.x && part.y === letterPosition.y) || 
-//           letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y));
-
-//       letterPositions.push({ letter, ...letterPosition });
-//   });
-// }
-
-// wordSpreader();
-
 function colorSpreader(){
   const randomColorSequence = colors[Math.floor(Math.random() * colors.length)];
 
@@ -136,8 +110,6 @@ function gameOver(){
     count=0;
     gameLoop();
     scoreBox.innerHTML = "Score: " + score;
-    
-    // wordSpreader();
     colorSpreader();
     return; // Exit the game engine function to stop the game loop
 }
@@ -178,12 +150,6 @@ function gameEngine(){
                  // Displaying the Timer and Score
                  scoreBox.innerHTML = "Score: " + score;
                  timerBox.innerHTML = "Timer: " + Math.ceil(timer/1000);
-
-                 // Changing the direction of the snake
-                 snakeArr.unshift({
-                   x: snakeArr[0].x + inputDir.x,
-                   y: snakeArr[0].y + inputDir.y,
-                 }); 
 
                  colorSpreader();
             }
@@ -230,16 +196,6 @@ function gameEngine(){
         foodElement.style.gridColumnStart = colorPos.x;
         foodElement.style.backgroundColor = `#${colorPos.color}`;
         foodElement.classList.add('food');
-
-        // // Create a container element to center the letter
-        // const letterContainer = document.createElement('div');
-        // letterContainer.classList.add('letter-container');
-
-        // // Set the text content of the letter container to the letter
-        // letterContainer.textContent = letterPos.letter;
-
-        // // Append the letter container to the food element
-        // foodElement.appendChild(letterContainer);
 
         // Append the food element to the board
         board.appendChild(foodElement);
