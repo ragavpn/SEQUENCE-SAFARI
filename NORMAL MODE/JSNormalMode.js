@@ -4,6 +4,7 @@ const foodSound=new Audio('food.mp3');
 const gameOverSound=new Audio('death.mp3');
 const moveSound=new Audio('move.wav');
 const musicSound=new Audio('music.mp3');
+const sequence = document.querySelector(".color_seq");
 
 let count=0;
 let myInterval;
@@ -23,6 +24,17 @@ const letterPositions = [];
 
 // The Words that will be displayed on grid for the snake to eat
 let words=["AHOY","ADIOS","CIAO","HOLA","SALUT","SHALOM","NIT","TRICHY"] 
+
+let colors = [
+  ['FF0000', '000CFF', '7C00FF' , 'FF8B00'],
+  ['00FFE8', 'FFEC00', '32FF00', 'FF0000'],
+  ['FF8B00', '7C00FF', '32FF00'],
+  ['000CFF', 'FF00F0', 'FF8B00', '32FF00'],
+  ['32FF00', '7C00FF', 'FFEC00']
+];
+
+let colorSequence = [];
+
 
 function main(millisecondspassed) {
   
@@ -56,31 +68,57 @@ function isCollide(snake) {
 
 
 // Generates a random word from the 'words' array and places it in random places on grid
-function wordSpreader(){  
-  // Generate a random word from the 'words' array
-  const randomWord = words[Math.floor(Math.random() * words.length)];
-  word.innerHTML = "The Word:<br>" + randomWord;
+// function wordSpreader(){  
+//   // Generate a random word from the 'words' array
+//   const randomWord = words[Math.floor(Math.random() * words.length)];
+//   word.innerHTML = "The Word:<br>" + randomWord;
 
-  // Clear the array which has the letter positions
-  letterPositions.length = 0;
+//   // Clear the array which has the letter positions
+//   letterPositions.length = 0;
 
-  // Generate random positions for each letter in the word
-  randomWord.split('').forEach((letter) => {
-      let letterPosition = { x: 0, y: 0 };
-      do {
-          letterPosition = {
-              x: Math.floor(Math.random() * 23)+2,
-              y: Math.floor(Math.random() * 23)+2,
-            };
-          } while (snakeArr.some((part) => part.x === letterPosition.x && part.y === letterPosition.y) || 
-          letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y));
+//   // Generate random positions for each letter in the word
+//   randomWord.split('').forEach((letter) => {
+//       let letterPosition = { x: 0, y: 0 };
+//       do {
+//           letterPosition = {
+//               x: Math.floor(Math.random() * 23)+2,
+//               y: Math.floor(Math.random() * 23)+2,
+//             };
+//           } while (snakeArr.some((part) => part.x === letterPosition.x && part.y === letterPosition.y) || 
+//           letterPositions.some((letter) => letter.x === letterPosition.x && letter.y === letterPosition.y));
 
-      letterPositions.push({ letter, ...letterPosition });
+//       letterPositions.push({ letter, ...letterPosition });
+//   });
+// }
+
+// wordSpreader();
+
+function colorSpreader(){
+  const randomColorSequence = colors[Math.floor(Math.random() * colors.length)];
+
+  colorSequence.length = 0;
+
+  randomColorSequence.forEach((color) => {
+    let colorPosition = {x: 0, y: 0};
+    do {
+        colorPosition = {
+            x: Math.floor(Math.random() * 23)+2,
+            y: Math.floor(Math.random() * 23)+2,
+          };
+        } while (snakeArr.some((part) => part.x === colorPosition.x && part.y === colorPosition.y) || 
+        colorSequence.some((letter) => letter.x === colorPosition.x && letter.y === colorPosition.y));
+
+    colorSequence.push({ color, ...colorPosition });
   });
+
+  let color_markup = "";
+  for(let i =0 ; i < randomColorSequence.length; i++){
+        color_markup += `<div class="color_blocks" style ="background-color: #${randomColorSequence[i]}; color: #${randomColorSequence[i]}"></div>`;
+    }
+  sequence.innerHTML = color_markup;
 }
 
-wordSpreader();
-
+colorSpreader();
 
 // Game Over logic
 function gameOver(){
@@ -99,7 +137,8 @@ function gameOver(){
     gameLoop();
     scoreBox.innerHTML = "Score: " + score;
     
-    wordSpreader();
+    // wordSpreader();
+    colorSpreader();
     return; // Exit the game engine function to stop the game loop
 }
 
@@ -111,17 +150,17 @@ function gameEngine(){
     }   
     // Check if the snake head position matches the next letter position in the word
     if (
-      letterPositions.length > 0 &&
-      snakeArr[0].y === letterPositions[0].y &&
-      snakeArr[0].x === letterPositions[0].x
+      colorSequence.length > 0 &&
+      snakeArr[0].y === colorSequence[0].y &&
+      snakeArr[0].x === colorSequence[0].x
     ) {
 
         // Remove the matched letter from the array
             foodSound.play();
-            letterPositions.shift();  
+            colorSequence.shift();  
 
         // Check if the snake has eaten the entire word
-            if (letterPositions.length === 0) {
+            if (colorSequence.length === 0) {
                 score += 1;   // Updating the score
                 timer += 5000;   // Updating the timer
 
@@ -146,14 +185,14 @@ function gameEngine(){
                    y: snakeArr[0].y + inputDir.y,
                  }); 
 
-                 wordSpreader();
+                 colorSpreader();
             }
       }
     // Checking if the snake ate any other letter in the word not following the order
     else if (
-                letterPositions.length > 0 &&
-                letterPositions.slice(1).some((letter) => {
-                  return letter.x === snakeArr[0].x && letter.y === snakeArr[0].y;
+                colorSequence.length > 0 &&
+                colorSequence.slice(1).some((color) => {
+                  return color.x === snakeArr[0].x && color.y === snakeArr[0].y;
                 })
             )gameOver();
 
@@ -185,26 +224,26 @@ function gameEngine(){
 
 
     // Update the food element to display the letters
-    letterPositions.forEach((letterPos) => {
-    const foodElement = document.createElement('div');
-    foodElement.style.gridRowStart = letterPos.y;
-    foodElement.style.gridColumnStart = letterPos.x;
-    foodElement.style.fontSize = `${Math.floor(60/25)}vmin`;
-    foodElement.classList.add('food');
+    colorSequence.forEach((colorPos) => {
+        const foodElement = document.createElement('div');
+        foodElement.style.gridRowStart = colorPos.y;
+        foodElement.style.gridColumnStart = colorPos.x;
+        foodElement.style.backgroundColor = `#${colorPos.color}`;
+        foodElement.classList.add('food');
 
-    // Create a container element to center the letter
-    const letterContainer = document.createElement('div');
-    letterContainer.classList.add('letter-container');
+        // // Create a container element to center the letter
+        // const letterContainer = document.createElement('div');
+        // letterContainer.classList.add('letter-container');
 
-    // Set the text content of the letter container to the letter
-    letterContainer.textContent = letterPos.letter;
+        // // Set the text content of the letter container to the letter
+        // letterContainer.textContent = letterPos.letter;
 
-    // Append the letter container to the food element
-    foodElement.appendChild(letterContainer);
+        // // Append the letter container to the food element
+        // foodElement.appendChild(letterContainer);
 
-    // Append the food element to the board
-    board.appendChild(foodElement);
-  });
+        // Append the food element to the board
+        board.appendChild(foodElement);
+    });
 }
 
 // Main Logic starts here

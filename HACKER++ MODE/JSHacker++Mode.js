@@ -1554,6 +1554,3 @@ else{
   onScreenButtons1();
   pauseResumeButtons();
 }
-
-
-
