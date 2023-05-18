@@ -125,6 +125,7 @@ function gridChoice(choice) {
 }
 
 function gridSize() {
+  musicSound.play();
   let parentDiv = document.createElement("div");
   parentDiv.classList.add("modal"); 
   parentDiv.id = "modal"
@@ -745,7 +746,7 @@ function quit(){
 }
 
 // Main logic starts here
-musicSound.play();
+
 
 gridSize();
 addHiScore();

@@ -526,6 +526,7 @@ body{
   #scoreBox {
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
     font-size: 2.15vmax;
+    width: 8vmax;
   }
 
   #hiscoreBox {
@@ -601,14 +602,71 @@ body{
   }
   
   #resumeButton:hover{
-    background: linear-gradient(rgb(16, 201, 133),rgb(51, 195, 32));
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
     cursor: pointer;
   }
   
   #pauseButton:hover{
-    background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
     cursor: pointer;
   }
 
+  #pauseButton:disabled:hover{
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
+  }
+
+  #resumeButton:disabled:hover{
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
+  }
+
+  .uiDiv{
+    background: linear-gradient(rgb(38, 55, 40),rgb(21, 44, 46));
+  }
+
+  .text{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    margin-bottom: 10vmin;
+  }
+
+  .gridButton{
+    font-size: 2vmax;
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+  }
+
+  .gridButton:hover{
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
+  }
+
+  .restartButton{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2vmax;
+  }
+
+  .quitButton{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2vmax;
+    width:8vmax;
+  }
+
+  .scoreText{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2.3vmax;
+  }
+
+  .gameOverDiv{
+    background: linear-gradient(rgb(38, 55, 40),rgb(21, 44, 46));
+  }
+
+  .gameOverText{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+  }
+
+  .restartButton:hover{
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
+  }
+
+  .quitButton:hover{
+    background: linear-gradient(rgb(48, 121, 56),rgb(9, 84, 91));
+  }
   /* Continue modifying styles for other elements */
 }
