@@ -203,7 +203,7 @@
     margin-bottom: 1.7rem;
     border-radius: 1.5vmin;
     height: 7vmin;
-    width: 22vmin;
+    width: 15vmin;
     justify-content: center;
     align-items: center;
     transition-duration: 0.4s;
@@ -517,9 +517,10 @@ body{
     background: url("bgmobile.jpg");
 
     height: 100%;
+    width: 100%;
 
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-size: cover;
   }
 
@@ -554,7 +555,7 @@ body{
 
   .centerBox{
     position: relative;
-    bottom: -5vmax;
+    bottom: -10vmax;
   }
 
   .rightContainer{
