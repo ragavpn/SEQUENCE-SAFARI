@@ -525,17 +525,17 @@ body{
 
   #scoreBox {
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2.8vmax;
+    font-size: 2.15vmax;
   }
 
   #hiscoreBox {
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2.8vmax;
+    font-size: 2.15vmax;
   }
 
   #timerBox {
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2.8vmax;
+    font-size: 2.15vmax;
   }
 
   #board {
@@ -547,18 +547,18 @@ body{
 
   .leftContainer{
     position: relative;
-    left:20vmax;
-    top: -35.7vmax;
+    left: 15vmax;
+    top: -35.3vmax;
   }
 
   .centerBox{
     position: relative;
-    bottom: -12vmax;
+    bottom: -5vmax;
   }
 
   .rightContainer{
     position: relative;
-    left: -20vmax;
+    left: -15vmax;
     bottom: 35vmax;
   }
   
@@ -567,7 +567,7 @@ body{
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
     height: 2.5vmax;
     width: 10vmax;
-    font-size: 3vmin;
+    font-size: 3.5vmin;
   
   }
 
@@ -581,7 +581,7 @@ body{
 
   #word{
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2.7vmax;
+    font-size: 2.15vmax;
   }
 
   #pauseButton{
