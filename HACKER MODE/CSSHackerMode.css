@@ -510,3 +510,105 @@ body{
   align-items: center;
   text-align: center;
 }
+
+/* Styles for smaller screens */
+@media (max-width: 768px) {
+  .body {
+    background: url("bgmobile.jpg");
+
+    height: 100%;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  #scoreBox {
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2.8vmax;
+  }
+
+  #hiscoreBox {
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2.8vmax;
+  }
+
+  #timerBox {
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2.8vmax;
+  }
+
+  #board {
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    border: 0.7vmin solid black;
+    border-radius: 1vmax;
+    opacity: 0.95;
+  }
+
+  .leftContainer{
+    position: relative;
+    left:20vmax;
+    top: -35.7vmax;
+  }
+
+  .centerBox{
+    position: relative;
+    bottom: -12vmax;
+  }
+
+  .rightContainer{
+    position: relative;
+    left: -20vmax;
+    bottom: 35vmax;
+  }
+  
+
+  #life{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    height: 2.5vmax;
+    width: 10vmax;
+    font-size: 3vmin;
+  
+  }
+
+  #arrowButtons button {
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 3vmin;
+    border-radius: 1vmin;
+    height: 6vmax;
+    width: 6vmax;
+  }
+
+  #word{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    font-size: 2.7vmax;
+  }
+
+  #pauseButton{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    height:8vmin;
+    width: 8vmin;
+    font-size: 2.7vmin;
+  
+  }
+  
+  #resumeButton{
+    background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
+    height:8vmin;
+    width: 8vmin;
+    font-size: 2.7vmin;
+    margin-left: 1.5vmin;
+  }
+  
+  #resumeButton:hover{
+    background: linear-gradient(rgb(16, 201, 133),rgb(51, 195, 32));
+    cursor: pointer;
+  }
+  
+  #pauseButton:hover{
+    background: linear-gradient(rgb(155, 201, 16),rgb(51, 195, 32));
+    cursor: pointer;
+  }
+
+  /* Continue modifying styles for other elements */
+}
