@@ -631,7 +631,7 @@ body{
   .gridButton{
     font-size: 2vmax;
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    margin-bottom: 2.5vmax;
+    margin-bottom: 1.7vmax;
     height: 5vmax;
   }
 
@@ -642,18 +642,18 @@ body{
 
   .restartButton{
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2vmax;
+    font-size: 1vmax;
   }
 
   .quitButton{
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2vmax;
+    font-size: 1vmax;
     width:8vmax;
   }
 
   .scoreText{
     background: linear-gradient(rgb(94, 225, 107),rgb(35, 105, 112));
-    font-size: 2.3vmax;
+    font-size: 2.1vmax;
   }
 
   .gameOverDiv{
