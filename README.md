@@ -2,7 +2,7 @@
 
 The first task of DELTA
 
-This game consits of 2 modes:
+This game consits of 3 modes:
   1. Normal Mode
   2. Hacker Mode
   3. Hacker++ Mode
