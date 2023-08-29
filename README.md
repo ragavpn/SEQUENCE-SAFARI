@@ -1,4 +1,4 @@
-# DELTA-SEQUENCE-SAFARI
+# SEQUENCE-SAFARI
 
 The first task of DELTA
 
