@@ -16,6 +16,6 @@ Hacker++ Mode - The game has obstacles moving in the game and if the snake ats i
 Choose any mode and play and have fun with it. 
 
 The Github pages for all three modes are specified below:
-1. https://ragavpn.github.io/DELTA-SEQUENCE-SAFARI/NORMAL%20MODE/
-2. https://ragavpn.github.io/DELTA-SEQUENCE-SAFARI/HACKER%20MODE/
-3. https://ragavpn.github.io/DELTA-SEQUENCE-SAFARI/HACKER++%20MODE/
+1. https://ragavpn.github.io/SEQUENCE-SAFARI/NORMAL%20MODE/
+2. https://ragavpn.github.io/SEQUENCE-SAFARI/HACKER%20MODE/
+3. https://ragavpn.github.io/SEQUENCE-SAFARI/HACKER++%20MODE/
